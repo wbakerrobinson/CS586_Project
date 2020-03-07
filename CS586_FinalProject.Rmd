@@ -2,30 +2,58 @@
 title: "CS 586 Final Project"
 author: "William Baker-Robinson and Kevin Ng"
 date: "3/7/2020"
-output:
-  html_document:
-    theme: lumen
-    toc: yes
-    toc_float:
-      collapsed: yes
-      smooth_scroll: no
-editor_options:
-  chunk_output_type: console_document
-params:
-  data:
-    label: "Input Availability Survey: "
-    value: Example_Capstone_Prequisite_Data.xlsx
-    input: file
-    
-    #label: "Input Project Survey: "
-    #value: Survey_1_Response_Data.csv
-    #input: file
-    
-    #label: "Input Project Information: "
-    #value: "data/ProjectData - Sheet1.csv" 
-    #input: file 
+output: html_document
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r, echo = FALSE}
+#All libraries here
+
+```
+
+```{r, echo = FALSE}
+## Only run examples in interactive R sessions
+if (interactive()) {
+
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      fileInput("Availability Survey", "Choose CSV File",
+        accept = c(
+          "text/csv",
+          "text/comma-separated-values,text/plain",
+          ".csv")
+        ),
+      tags$hr(),
+      checkboxInput("header", "Header", TRUE)
+    ),
+    mainPanel(
+      tableOutput("contents")
+    )
+  )
+)
+
+server <- function(input, output) {
+  output$contents <- renderTable({
+    # input$file1 will be NULL initially. After the user selects
+    # and uploads a file, it will be a data frame with 'name',
+    # 'size', 'type', and 'datapath' columns. The 'datapath'
+    # column will contain the local filenames where the data can
+    # be found.
+    inFile <- input$file1
+
+    if (is.null(inFile))
+      return(NULL)
+
+    read.csv(inFile$datapath, header = input$header)
+  })
+}
+
+shinyApp(ui, server)
+}
+```
+
