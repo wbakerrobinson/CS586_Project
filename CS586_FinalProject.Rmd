@@ -14,16 +14,16 @@ editor_options:
 params:
   data:
     label: "Input Availability Survey: "
-    value: Example Capstone Prequisite Data.xlsx
+    value: Example_Capstone_Prequisite_Data.xlsx
     input: file
-  data:
-    label: "Input Project Survey: "
-    value: Survey_1_Response_Data.csv
-    input: file
-  data:
-    label: "Input Project Information: "
-    value: "data/ProjectData - Sheet1.csv" 
-    input: file 
+    
+    #label: "Input Project Survey: "
+    #value: Survey_1_Response_Data.csv
+    #input: file
+    
+    #label: "Input Project Information: "
+    #value: "data/ProjectData - Sheet1.csv" 
+    #input: file 
 ---
 
 ```{r setup, include=FALSE}
