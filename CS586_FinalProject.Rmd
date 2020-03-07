@@ -1,0 +1,22 @@
+---
+title: "CS 586 Final Project"
+author: "William Baker-Robinson and Kevin Ng"
+date: "3/7/2020"
+output:
+  html_document:
+    theme: lumen
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+editor_options:
+  chunk_output_type: console_document
+params:
+  survey1: 
+  survey2:
+  survey3:
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
