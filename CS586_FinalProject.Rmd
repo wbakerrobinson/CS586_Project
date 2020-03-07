@@ -12,10 +12,18 @@ output:
 editor_options:
   chunk_output_type: console_document
 params:
-  survey1: "data/Example Capstone Prequisite Data.xlsx"
-  survey2: "data/Survey_1_Response_data.csv"
-  survey3: "data/Survey_2_Responses_Data.csv"
-  project: "data/ProjectData - Sheet1.csv"
+  data:
+    label: "Input Availability Survey: "
+    value: Example Capstone Prequisite Data.xlsx
+    input: file
+  data:
+    label: "Input Project Survey: "
+    value: Survey_1_Response_Data.csv
+    input: file
+  data:
+    label: "Input Project Information: "
+    value: "data/ProjectData - Sheet1.csv" 
+    input: file 
 ---
 
 ```{r setup, include=FALSE}
