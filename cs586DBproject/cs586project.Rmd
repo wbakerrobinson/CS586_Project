@@ -18,7 +18,10 @@ params:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# This is a test!!!!
+```{r libraries, echo =FALSE}
+library(DBI)
+library(RPostgres)
+```
 
 ```{r connect postgres, echo = FALSE}
 
