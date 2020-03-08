@@ -1,25 +1,22 @@
 library(shiny)
-library(data.table)
+library(readxl)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
     titlePanel("Portland State CS Capstone Survey Analysis"),
-    fileInput("csv1", label="Student Availability Survey", multiple = FALSE,
+    fileInput("availSurv", label="Student Availability Survey", multiple = FALSE,
               accept = c(
                   "text/csv",
                   "text/comma-separated-values,text/plain",
                   ".csv")),
-    fileInput("csv2", label="Project Survey", multiple = FALSE,
+    fileInput("projSurv", label="Project Survey", multiple = FALSE,
               accept = c(
                   "text/csv",
                   "text/comma-separated-values,text/plain",
                   ".csv")),
-    fileInput("csv3", label="Eligibility Criteria", multiple = FALSE,
-              accept = c(
-                  "text/csv",
-                  "text/comma-separated-values,text/plain",
-                  ".csv")),
-    fileInput("csv4", label="Project Data", multiple = FALSE,
+    fileInput("eligible", label="Eligibility Criteria", multiple = FALSE,
+              accept = c(".xlsx")),
+    fileInput("projInfo", label="Project Data", multiple = FALSE,
               accept = c(
                   "text/csv",
                   "text/comma-separated-values,text/plain",
@@ -38,6 +35,13 @@ readCSVparam <- function(inFile)
     else
         return(read.csv(inFile$datapath))
 }
+readXLparam <- function(inFile)
+{
+    if(is.null(inFile))
+        return(NULL)
+    else
+        return(read_xlsx(inFile$datapath))
+}
 
 server <- function(input, output) {
     output$report <- downloadHandler(
@@ -46,10 +50,10 @@ server <- function(input, output) {
             tempReport <- file.path(tempdir(), "cs586Project.Rmd")
             file.copy("cs586Project.Rmd", tempReport, overwrite = TRUE)
             #parameters passed to .rmd
-            params <- list(availSurv = readCSVparam(input$csv1), 
-                           projSurv = readCSVparam(input$csv2), 
-                           eligible = readCSVparam(input$csv3),
-                           projInfo = readCSVparam(input$csv4), 
+            params <- list(availSurv = readCSVparam(input$availSurv), 
+                           projSurv = readCSVparam(input$projSurv), 
+                           eligible = readXLparam(input$eligibile),
+                           projInfo = readCSVparam(input$projInfo), 
                            server = input$server, 
                            database = input$database, username = input$username, 
                            password = input$dbPassword)

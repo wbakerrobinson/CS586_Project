@@ -20,12 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # This is a test!!!!
 
-```{r}
-print(params$server)
-print(params$database)
-print(params$username)
-print(params$password)
+```{r connect postgres, echo = FALSE}
 
-params$csv1
 ```
 
