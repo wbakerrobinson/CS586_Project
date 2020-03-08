@@ -1,0 +1,30 @@
+---
+title: "Capstone Survey Analysis"
+author: "William Baker-Robinson and Kevin Ng"
+date: "3/7/2020"
+output: html_document
+params:
+  csv1: NA
+  csv2: NA
+  csv3: NA
+  csv4: NA
+  server: NA
+  database: NA
+  username: NA
+  password: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# This is a test!!!!
+```{r}
+print(server)
+print(database)
+print(username)
+print(password)
+
+names(csv1)
+```
+
