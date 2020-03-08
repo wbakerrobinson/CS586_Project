@@ -20,10 +20,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries, echo =FALSE}
 library(DBI)
-library(RPostgres)
+library(odbc)
 ```
 
 ```{r connect postgres, echo = FALSE}
-
+dbObject <- dbConnect(odbc,
+                      Driver = "PostgreSQL Driver",
+                      Server = params$server,
+                      Database = params$database,
+                      UID = params$username,
+                      PWD = params$password,
+                      port = 5432)
+dbSendQuery(dbObject, "SELECT * FROM AGENTS")
 ```
 
