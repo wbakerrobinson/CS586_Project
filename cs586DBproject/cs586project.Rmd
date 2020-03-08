@@ -19,12 +19,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # This is a test!!!!
-```{r}
-print(server)
-print(database)
-print(username)
-print(password)
 
-names(csv1)
+```{r}
+print(params$server)
+print(params$database)
+print(params$username)
+print(params$password)
+
+params$csv1
 ```
 
