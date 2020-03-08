@@ -46,10 +46,10 @@ server <- function(input, output) {
             tempReport <- file.path(tempdir(), "cs586Project.Rmd")
             file.copy("cs586Project.Rmd", tempReport, overwrite = TRUE)
             #parameters passed to .rmd
-            params <- list(csv1 = readCSVparam(input$csv1), 
-                           csv2 = readCSVparam(input$csv2), 
-                           csv3 = readCSVparam(input$csv3),
-                           csv4 = readCSVparam(input$csv4), 
+            params <- list(availSurv = readCSVparam(input$csv1), 
+                           projSurv = readCSVparam(input$csv2), 
+                           eligible = readCSVparam(input$csv3),
+                           projInfo = readCSVparam(input$csv4), 
                            server = input$server, 
                            database = input$database, username = input$username, 
                            password = input$dbPassword)

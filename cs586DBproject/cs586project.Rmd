@@ -4,10 +4,10 @@ author: "William Baker-Robinson and Kevin Ng"
 date: "3/7/2020"
 output: html_document
 params:
-  csv1: NA
-  csv2: NA
-  csv3: NA
-  csv4: NA
+  availSurv: NA
+  projSurv: NA
+  eligible: NA
+  projInfo: NA
   server: NA
   database: NA
   username: NA
