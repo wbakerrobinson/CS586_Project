@@ -8,10 +8,7 @@ params:
   projSurv: NA
   eligible: NA
   projInfo: NA
-  server: NA
-  database: NA
-  username: NA
-  password: NA
+  conn: NA
 ---
 
 ```{r setup, include=FALSE}
@@ -19,12 +16,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r connect postgres, echo = FALSE}
-dbObject <- dbConnect(odbc,
-                      Driver = "PostgreSQL Driver",
-                      Database = params$database,
-                      UID = params$username,
-                      PWD = params$password,
-                      port = 5432)
-dbSendQuery(dbObject, "SELECT * FROM AGENTS")
+df <- dbGetQuery(param$conn, "SELECT * FROM agent")
 ```
 

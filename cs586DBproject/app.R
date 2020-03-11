@@ -2,8 +2,11 @@ library(shiny)
 library(readxl)
 library(DBI)
 library(odbc)
+library(pool)
+library(RPostgres)
 
-# Define UI for application that draws a histogram
+
+# Define UI for application that takes input
 ui <- fluidPage(
     titlePanel("Portland State CS Capstone Survey Analysis"),
     fileInput("availSurv", label="Student Availability Survey", multiple = FALSE,
@@ -24,8 +27,8 @@ ui <- fluidPage(
                   "text/comma-separated-values,text/plain",
                   ".csv")),
     tags$hr(),
-    textInput("server", label = "Server Path"),
-    textInput("database", label = "Database Name"),
+    textInput("host", label = "Host"),
+    textInput("dbname", label = "Database Name"),
     textInput("username", label = "Database Username"),
     passwordInput("dbPassword", label = "Database Password"),
     downloadButton("report", "Generate report")
@@ -56,9 +59,14 @@ server <- function(input, output) {
                            projSurv = readCSVparam(input$projSurv), 
                            eligible = readXLparam(input$eligibile),
                            projInfo = readCSVparam(input$projInfo), 
-                           server = input$server, 
-                           database = input$database, username = input$username, 
-                           password = input$dbPassword)
+                           conn = dbConnect(odbc::odbc(),
+                               driver = "PostgreSQL Driver",
+                               dbname = input$dbname,
+                               host = input$host,
+                               username = input$username,
+                               password = input$dbPassword,
+                               port = 5432
+                           ))
             rmarkdown::render(tempReport, output_file = file,
                               params = params,
                               envir = new.env(parent = globalenv()))
