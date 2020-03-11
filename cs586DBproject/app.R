@@ -60,7 +60,7 @@ server <- function(input, output) {
                            eligible = readXLparam(input$eligibile),
                            projInfo = readCSVparam(input$projInfo), 
                            conn = dbConnect(odbc::odbc(),
-                               driver = "PostgreSQL Driver",
+                               driver = "/usr/local/lib/psqlodbcw.so",
                                dbname = input$dbname,
                                host = input$host,
                                username = input$username,
