@@ -100,8 +100,16 @@ elif (connected == True and r.userData == False and dbData == True):
 else:
   print("Not connected")
 ```
-# 20 Questions  
 
+# About
+This project was created by Will and Kevin for CS 586. It is designed to help with the analysis of surveys relating to the PSU Senior Capstone Class. Hopefully this document, and the database created will be able to be used for easier selection of project teams, and the summary of other capstone related information.
+Some notes about our program:  
+(@) This program will create a database of the information supplied on whichiver database you provide credentials for. This should work as long as the database is Postgres.  
+(@) After the database is created you will get this document as a .html with answers to the 20 questions.  
+(@) If there are no files submited at the start the program will atempt to conenct to the database and run the report.  
+(@) The file upload format for the availability survey, project interest survey, and projects information is .csv. We expect excel files for the eligibility information document.  
+
+# 20 Questions     
 ## Interst Level  
 ### List students based on project of interest:  
 
