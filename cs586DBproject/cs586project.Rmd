@@ -15,37 +15,86 @@ params:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r}
+```{r param vars for python}
 host <- params$host
 dbName <- params$dbName
 username <- params$username
 password <- params$password
+names(params$availSurv)
+names(params$projSurv)
+names(params$projInfo)
+names(params$eligible)
 ```
 
-
-```{python}
+```{python connect to database}
 import psycopg2
 import pandas
 
+connected = True
+
 try:
     conn = psycopg2.connect(
-      dbname = r$dbName,
-      user = r$username,
-      host = r$host,
-      password = r$password
+      dbname = r.dbName,
+      user = r.username,
+      host = r.host,
+      password = r.password
     )
 except:
     print("Unable to connect to database")
-cur = conn.cursor()
-cur.execute("SELECT * FROM agent A WHERE A.salary > 200000;")
-cur.fetchall()
+    connected = False
+if(connected):
+    cur = conn.cursor()
 ```
 
+```{r check user uploads and clean}
+#check to see if the user uploaded any docs
+userData <- FALSE
+availSurv <- FALSE
+projSurv <- FALSE
+eligible <- FALSE
+projInfo <- FALSE
+if(py$connected == TRUE){
+  # check avail surv
+    # if true clean
+    # set to true
+  # check proj surv
+    # if true clean
+    # set to true
+  # check eligible
+    # if true clean
+    # set to true
+  # check projInfo
+    # if true clean
+    # set to true
+  userData <- TRUE
+}
+```
+
+```{python check db for data}
+if ( r.userData == True and connected == True):
+  print("user data to compare to db")
+  # query student
+  # if student has no data upload all data to db
+  # else compare to student to find new data 
+    #find where new data starts in student avail
+    #compare new section to prev to check for duplicate stu id
+    # keep track of all id which are duplicated
+    # update info for duplicated
+    # load the rest to DB
+elif (connected == True):
+  print("Connected but no user data")
+  # query for student data
+  # if query is not null set variable to true
+  # else set variable to false
+else:
+  print("Not connected and no user data :|")
+```
 
 ```{python}
-conn.close()
+if(connected):
+  conn.close()
 ```
 
