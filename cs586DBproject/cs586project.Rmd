@@ -103,52 +103,48 @@ else:
 # 20 Questions  
 
 ## Interst Level  
-
-## Availability  
-
-## Skill Level  
-
-## Eligibility  
-
-### When are most students available?  
-
-### What are the most common skills?  
-
-### Where do skills not match with eligibility criteria?  
-
 ### List students based on project of interest:  
 
 ### Count the number of students interested in each project:  
 
 ### Which project garnered the least amount of interest?  
 
-### Which student left the most additional comments?  
+### Are there more students who marked low interest in all projects than students who marked high interest in all projects?  
+
+### What is the average amount of interest for project 3?  
+
+### How many students listed more than 5 skills or subjects that interest them the most?  
+
+### Is there at least one pair of students where each student has similar degrees of interest in a project and where a subject that one student feels the most knowledgeable about is the same subject that the other student feels the least knowledgeable about? 
+
+### How many students share a favorite programming language with another student who expresses the same confidence level for at least one project?  
+
+## Availability  
+### When are most students available?  
 
 ### What proportion of students are available past 6:00 Pm?  
 
 ### What proportion of students perfer times before 8:00 Am?
 
-### What are some of the least common skills?  
-
-### Of the students who expressed at least moderate interest in over half the projects, what percentage of them also expressed at least moderate confidence in their skill?   
-
-### Are there more students who marked low interest in all projects than students who marked high interest in all projects?  
-
-### What is the most common skill among those who got straight A’s in their prerequisite courses?  
-
-### Is the proportion of solo workers who responded to the prompt regarding anything else to know about them greater than or less than the proportion of non-solo workers who responded?  
-
-### What is the average amount of interest for project 3?  
-
 ### What is the minimum number of time slot availabilities of any student?  
 
 ### Which students have preferred times that are not available times?  
 
-### Is there at least one pair of students where each student has similar degrees of interest in a project and where a subject that one student feels the most knowledgeable about is the same subject that the other student feels the least knowledgeable about? 
+## Skills
+### What are the most common skills?  
 
-### How many students listed more than 5 skills or subjects that interest them the most?  
+### What are some of the least common skills?  
 
-### How many students share a favorite programming language with another student who expresses the same confidence level for at least one project?  
+### Where do skills not match with eligibility criteria?  
+
+### Of the students who expressed at least moderate interest in over half the projects, what percentage of them also expressed at least moderate confidence in their skill?   
+
+### What is the most common skill among those who got straight A’s in their prerequisite courses?  
+
+## Miscellaneous
+### Which student left the most additional comments?  
+
+### Is the proportion of solo workers who responded to the prompt regarding anything else to know about them greater than or less than the proportion of non-solo workers who responded?  
 
 ```{python}
 if(connected):
