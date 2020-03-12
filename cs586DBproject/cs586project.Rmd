@@ -37,6 +37,7 @@ import pandas
 
 connected = True
 dbData = False
+student = 0
 
 try:
     conn = psycopg2.connect(
@@ -50,32 +51,47 @@ except:
     connected = False
 if(connected):
     cur = conn.cursor()
-    cur.
-if(student == True)
+    cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'agent';")
+    student = cur.fetchone()
+    print(student)
+if(student[0] == 1):
+  print("The table checked exists...")
   dbData = True
 ```
 
 ```{r check user uploads and clean}
 #check to see if the user uploaded any docs
 userData <- FALSE
-availSurv <- FALSE
-projSurv <- FALSE
-eligible <- FALSE
-projInfo <- FALSE
+availSurvBool <- FALSE
+projSurvBool <- FALSE
+eligibleBool <- FALSE
+projInfoBool <- FALSE
 if(py$connected == TRUE){
-  # check avail surv
+  print("Connected to the DB this is where I am going to clean")
+  if(!is.null(params$availSurv))
+  {
     # if true clean
-    # set to true
-  # check proj surv
+    availSurvBool <- TRUE
+  }
+  if(!is.null(params$projSurv))
+  {
     # if true clean
-    # set to true
-  # check eligible
+    projSurvBool <- TRUE
+  }
+  if(!is.null(params$eligible))
+  {
     # if true clean
-    # set to true
-  # check projInfo
+    eligibleBool <- TRUE
+  }
+  if(!is.null(params$projectInfo))
+  {
     # if true clean
-    # set to true
-  userData <- TRUE
+    projectInfoBool <- TRUE
+  }
+  if(availSurvBool | projSurvBool | eligibleBool | projInfoBool)
+  {
+    userData <- TRUE
+  }
 }
 ```
 
@@ -83,6 +99,7 @@ if(py$connected == TRUE){
 canQuery = False
 
 if (connected == True and r.userData == True and dbData == False):
+  print("Connected, user supplied data, and db is empty")
   # run ddl 
   # upload all...
   canQuery = True
@@ -96,12 +113,13 @@ if (connected == True and r.userData == True and dbData == False):
     # load the rest to DB
   #canQuery = True
 elif (connected == True and r.userData == False and dbData == True):
+  print("connected, user did not supply data, and the db has data")
   canQuery = True  
+elif(connected == True and r.userData == False and dbData == False):
+  print("Connected but no data in the db, and no data provided to add")
 else:
   print("Not connected")
 ```
-
-# About
 
 
 # 20 Questions     
