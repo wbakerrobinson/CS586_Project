@@ -23,10 +23,6 @@ host <- params$host
 dbName <- params$dbName
 username <- params$username
 password <- params$password
-names(params$availSurv)
-names(params$projSurv)
-names(params$projInfo)
-names(params$eligible)
 ```
 
 ```{python connect to database}
@@ -34,6 +30,7 @@ import psycopg2
 import pandas
 
 connected = True
+dbData = False
 
 try:
     conn = psycopg2.connect(
@@ -47,6 +44,9 @@ except:
     connected = False
 if(connected):
     cur = conn.cursor()
+# CHECK IF STUDENT HAS DATA IN IT
+if(student == True)
+  dbData = True
 ```
 
 ```{r check user uploads and clean}
@@ -73,24 +73,26 @@ if(py$connected == TRUE){
 }
 ```
 
-```{python check db for data}
-if ( r.userData == True and connected == True):
-  print("user data to compare to db")
-  # query student
-  # if student has no data upload all data to db
-  # else compare to student to find new data 
+```{python update or upload}
+canQuery = False
+
+if (connected == True and r.userData == True and dbData == False):
+  # run ddl 
+  # upload all...
+  canQuery = True
+# elif (connected == True and r.userData == True and dbData == True):
+  #Will create if have time
     #find where new data starts in student avail
+    #assumption is that only the survey 1 & 2 data will be uploaded and updated like this
     #compare new section to prev to check for duplicate stu id
     # keep track of all id which are duplicated
     # update info for duplicated
     # load the rest to DB
-elif (connected == True):
-  print("Connected but no user data")
-  # query for student data
-  # if query is not null set variable to true
-  # else set variable to false
+  #canQuery = True
+elif (connected == True and r.userData == False and dbData == True):
+  canQuery = True  
 else:
-  print("Not connected and no user data :|")
+  print("Not connected")
 ```
 
 ```{python}
