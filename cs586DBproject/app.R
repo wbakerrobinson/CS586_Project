@@ -4,6 +4,7 @@ library(DBI)
 library(odbc)
 library(pool)
 library(RPostgres)
+library(reticulate)
 
 
 # Define UI for application that takes input
@@ -28,7 +29,7 @@ ui <- fluidPage(
                   ".csv")),
     tags$hr(),
     textInput("host", label = "Host"),
-    textInput("dbname", label = "Database Name"),
+    textInput("dbName", label = "Database Name"),
     textInput("username", label = "Database Username"),
     passwordInput("dbPassword", label = "Database Password"),
     downloadButton("report", "Generate report")
@@ -59,14 +60,11 @@ server <- function(input, output) {
                            projSurv = readCSVparam(input$projSurv), 
                            eligible = readXLparam(input$eligibile),
                            projInfo = readCSVparam(input$projInfo), 
-                           conn = dbConnect(odbc::odbc(),
-                               driver = "/usr/local/lib/psqlodbcw.so",
-                               dbname = input$dbname,
-                               host = input$host,
-                               username = input$username,
-                               password = input$dbPassword,
-                               port = 5432
-                           ))
+                           host = input$host,
+                           dbName = input$dbname,
+                           username = input$username,
+                           password = input$dbPassword
+            )
             rmarkdown::render(tempReport, output_file = file,
                               params = params,
                               envir = new.env(parent = globalenv()))

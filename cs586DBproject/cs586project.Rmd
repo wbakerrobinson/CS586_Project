@@ -8,14 +8,44 @@ params:
   projSurv: NA
   eligible: NA
   projInfo: NA
-  conn: NA
+  host: NA
+  dbName: NA
+  username: NA
+  password: NA
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r connect postgres, echo = FALSE}
-df <- dbGetQuery(param$conn, "SELECT * FROM agent")
+```{r}
+host <- params$host
+dbName <- params$dbName
+username <- params$username
+password <- params$password
+```
+
+
+```{python}
+import psycopg2
+import pandas
+
+try:
+    conn = psycopg2.connect(
+      dbname = r$dbName,
+      user = r$username,
+      host = r$host,
+      password = r$password
+    )
+except:
+    print("Unable to connect to database")
+cur = conn.cursor()
+cur.execute("SELECT * FROM agent A WHERE A.salary > 200000;")
+cur.fetchall()
+```
+
+
+```{python}
+conn.close()
 ```
 
