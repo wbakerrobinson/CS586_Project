@@ -2,7 +2,13 @@
 title: "Capstone Survey Analysis"
 author: "William Baker-Robinson and Kevin Ng"
 date: "3/7/2020"
-output: html_document
+output:  
+ html_document:
+    theme: lumen
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
 params:
   availSurv: NA
   projSurv: NA
