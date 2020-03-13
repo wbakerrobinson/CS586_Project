@@ -30,7 +30,7 @@ host <- params$host
 dbName <- params$dbName
 username <- params$username
 password <- params$password
-renderVal <- 1
+renderVal <- 4
 UpdateProgress <- function(renderVal, renderByShiny)
 {
   if(renderByShiny & renderVal < 25)
