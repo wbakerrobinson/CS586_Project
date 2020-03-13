@@ -30,7 +30,7 @@ ui <- fluidPage(theme = shinytheme("superhero"),
                          accept = c(
                             "text/csv",
                             "text/comma-separated-values,text/plain",
-                            ".csv"),
+                            ".csv")),
                fileInput("projInfo", label = "Project Data", multiple = FALSE,
                          accept = c(
                             "text/csv",
