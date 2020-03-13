@@ -6,28 +6,42 @@ library(reticulate)
 # Define UI for application that takes input
 ui <- fluidPage(
     titlePanel("Portland State CS Capstone Survey Analysis"),
-    fileInput("availSurv", label="Student Availability Survey", multiple = FALSE,
-              accept = c(
-                  "text/csv",
-                  "text/comma-separated-values,text/plain",
-                  ".csv")),
-    fileInput("projSurv", label="Project Survey", multiple = FALSE,
-              accept = c(
-                  "text/csv",
-                  "text/comma-separated-values,text/plain",
-                  ".csv")),
-    fileInput("eligible", label = "Eligibility Criteria", multiple = FALSE),
-    fileInput("projInfo", label = "Project Data", multiple = FALSE,
-              accept = c(
-                  "text/csv",
-                  "text/comma-separated-values,text/plain",
-                  ".csv")),
-    tags$hr(),
-    textInput("host", label = "Host"),
-    textInput("dbName", label = "Database Name"),
-    textInput("username", label = "Database Username"),
-    passwordInput("dbPassword", label = "Database Password"),
-    downloadButton("report", "Generate report")
+    fluidRow(
+        column(4,
+               h4("Data:"),
+               fileInput("availSurv", 
+                         label="Student Availability Survey", 
+                         multiple = FALSE,
+                         accept = c(
+                            "text/csv",
+                            "text/comma-separated-values,text/plain",
+                            ".csv")),
+               fileInput("projSurv", 
+                         label="Project Survey", 
+                         multiple = FALSE,
+                         accept = c(
+                            "text/csv",
+                            "text/comma-separated-values,text/plain",
+                            ".csv")),
+               fileInput("eligible", 
+                         label = "Eligibility Criteria", 
+                         multiple = FALSE),
+               fileInput("projInfo", label = "Project Data", multiple = FALSE,
+                         accept = c(
+                            "text/csv",
+                            "text/comma-separated-values,text/plain",
+                            ".csv"))
+        ),
+        column(3, 
+               h4("Database Credentials:"),
+               textInput("host", label = "Host"),
+               textInput("dbName", label = "Database Name"),
+               textInput("username", label = "Database Username"),
+               passwordInput("dbPassword", label = "Database Password"),
+               hr(),
+               downloadButton("report", "Generate report")
+        )
+    )
 )
 readCSVparam <- function(inFile)
 {
@@ -49,24 +63,30 @@ server <- function(input, output)
     output$report <- downloadHandler(
         filename = "cs586Project.html",
         content = function(file){
-            tempReport <- file.path(tempdir(), "cs586Project.Rmd")
-            file.copy("cs586Project.Rmd", tempReport, overwrite = TRUE)
-            #parameters passed to .rmd
-            params <- list(availSurv = readCSVparam(input$availSurv), 
-                           projSurv = readCSVparam(input$projSurv), 
-                           eligible = readXLparam(input$eligible),
-                           projInfo = readCSVparam(input$projInfo), 
-                           host = input$host,
-                           dbName = input$dbname,
-                           username = input$username,
-                           password = input$dbPassword
-            )
-            rmarkdown::render(tempReport, output_file = file,
-                              params = params,
-                              envir = new.env(parent = globalenv()))
+            withProgress(message = 'Rendering, please wait!', {
+                tempReport <- file.path(tempdir(), "cs586Project.Rmd")
+                file.copy("cs586Project.Rmd", tempReport, overwrite = TRUE)
+                #parameters passed to .rmd
+                params <- list(availSurv = readCSVparam(input$availSurv), 
+                               projSurv = readCSVparam(input$projSurv), 
+                               eligible = readXLparam(input$eligible),
+                               projInfo = readCSVparam(input$projInfo), 
+                               host = input$host,
+                               dbName = input$dbname,
+                               username = input$username,
+                               password = input$dbPassword,
+                               rendered_by_shiny = TRUE
+                )
+                    rmarkdown::render(tempReport, 
+                                      output_file = file, 
+                                      params = params, 
+                                      envir = new.env(parent = globalenv())
+                                      )
+                })
         }
     )
 }
+    
 
 # Run the application 
 shinyApp(ui = ui, server = server)

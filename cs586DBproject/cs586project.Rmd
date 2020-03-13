@@ -18,6 +18,7 @@ params:
   dbName: NA
   username: NA
   password: NA
+  rendered_by_shiny: FALSE
 ---
 
 ```{r setup, include=FALSE}
@@ -29,6 +30,15 @@ host <- params$host
 dbName <- params$dbName
 username <- params$username
 password <- params$password
+renderVal <- 1
+UpdateProgress <- function(renderVal, renderByShiny)
+{
+  if(renderByShiny & renderVal < 25)
+  {
+    shiny::setProgress(renderVal/25)
+    renderVal = renderVal + 1
+  }
+}
 ```
 
 ```{python connect to database}
@@ -58,6 +68,7 @@ if(student is not None):
 ```
 
 ```{r check user uploads and clean}
+UpdateProgress(renderVal, params$rendered_by_shiny)
 #check to see if the user uploaded any docs
 userData <- FALSE
 availSurvBool <- FALSE
@@ -91,6 +102,7 @@ if(py$connected == TRUE){
     userData <- TRUE
   }
 }
+UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ```{python update or upload}
@@ -101,7 +113,7 @@ if (connected == True and r.userData == True and dbData == False):
   # run ddl 
   # upload all...
   canQuery = True
- elif (connected == True and r.userData == True and dbData == True):
+elif (connected == True and r.userData == True and dbData == True):
   #Will create if have time for now nothing done with data just produces report.
     #find where new data starts in student avail
     #assumption is that only the survey 1 & 2 data will be uploaded and updated like this
