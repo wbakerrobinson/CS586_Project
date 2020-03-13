@@ -1,10 +1,11 @@
 library(shiny)
+library(shinythemes)
 library(readxl)
 library(reticulate)
 
 
 # Define UI for application that takes input
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("superhero"),
     titlePanel("Portland State CS Capstone Survey Analysis"),
     fluidRow(
         column(4,
