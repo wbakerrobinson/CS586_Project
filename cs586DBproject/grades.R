@@ -3,7 +3,7 @@
 library(tidyr)
 
 grades_raw <- read_excel(
-  ".\\Example Data\\Example Capstone Prerequisite Data.xlsx")
+  ".\\data\\Example_Capstone_Prerequisite_Data.xlsx")
 
 grades_long <- gather(grades_raw, class, grade, c("CS161",
                                                   "CS162",
