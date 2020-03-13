@@ -135,48 +135,56 @@ else:
 
 # 20 Questions     
 ## Interst Level  
-### List students based on project of interest:  
-
 ### Count the number of students interested in each project:  
 
-### Which project garnered the least amount of interest?  
+### Count the number of times a project was selected as a top 3 choice:  
 
 ### Are there more students who marked low interest in all projects than students who marked high interest in all projects?  
-
-### What is the average amount of interest for project 3?  
+_How to define low vs. high interest?_  
 
 ### How many students listed more than 5 skills or subjects that interest them the most?  
 
-### Is there at least one pair of students where each student has similar degrees of interest in a project and where a subject that one student feels the most knowledgeable about is the same subject that the other student feels the least knowledgeable about? 
-
-### How many students share a favorite programming language with another student who expresses the same confidence level for at least one project?  
+### What skills are students most interested in?  
 
 ## Availability  
 ### When are most students available?  
+_Create a heatmap_
 
-### What proportion of students are available past 6:00 Pm?  
+### Plot students time availability stratified by 1st choice of project:  
+_Bonus make a html widget that includes names_
 
-### What proportion of students perfer times before 8:00 Am?
+### Plot students time availability stratified by 2nd choice of project:  
+_Bonus make a html widget that includes names_
 
-### What is the minimum number of time slot availabilities of any student?  
+### Plot students time availability stratified by 3rd choice of project:  
+_Bonus make a html widget that includes names_
 
-### Which students have preferred times that are not available times?  
+### What proportion of students perfer times before 10:00 Am?
+
+### What proportion of students are available past 6:00 Pm? 
 
 ## Skills
-### What are the most common skills?  
+### What are the 5 most common skills?  
 
-### What are some of the least common skills?  
-
-### Where do skills not match with eligibility criteria?  
-
-### Of the students who expressed at least moderate interest in over half the projects, what percentage of them also expressed at least moderate confidence in their skill?   
+### What are the 5 least common skills?  
 
 ### What is the most common skill among those who got straight A’s in their prerequisite courses?  
+_Do they have to have an A in all pre-reqs? How many people actually did this?_  
 
-## Miscellaneous
-### Which student left the most additional comments?  
+### Return a list of the 5 students who are most confident in their ability to complete each project:  
 
-### Is the proportion of solo workers who responded to the prompt regarding anything else to know about them greater than or less than the proportion of non-solo workers who responded?  
+### Create a histogram of the students confidence level in completing each project:  
+
+### Create a barchart of the skills students are skilled in or familiar with:  
+
+## Eligibility
+### How many students do not meet eligibility criteria?   
+
+### Where do skills not match with eligibility criteria?  
+_May be hard to match skills and classes taken..._  
+
+### What is the average confidence level of students who do not meet eligibility criteria for each project?  
+
 
 ```{python}
 if(connected):
