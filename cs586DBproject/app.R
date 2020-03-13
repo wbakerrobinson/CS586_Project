@@ -26,7 +26,7 @@ ui <- fluidPage(theme = shinytheme("superhero"),
                             ".csv")),
                fileInput("eligible", 
                          label = "Eligibility Criteria", 
-                         multiple = FALSE),
+                         multiple = FALSE,
                          accept = c(
                             "text/csv",
                             "text/comma-separated-values,text/plain",
