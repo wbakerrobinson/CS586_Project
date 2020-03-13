@@ -9,7 +9,7 @@ ui <- fluidPage(theme = shinytheme("superhero"),
     titlePanel("Portland State CS Capstone Survey Analysis"),
     fluidRow(
         column(4,
-               h4("Data:"),
+               h3("Data:"),
                fileInput("availSurv", 
                          label="Student Availability Survey", 
                          multiple = FALSE,
@@ -34,7 +34,7 @@ ui <- fluidPage(theme = shinytheme("superhero"),
                             ".csv"))
         ),
         column(3, 
-               h4("Database Credentials:"),
+               h3("Database Credentials:"),
                textInput("host", label = "Host"),
                textInput("dbName", label = "Database Name"),
                textInput("username", label = "Database Username"),
@@ -42,7 +42,9 @@ ui <- fluidPage(theme = shinytheme("superhero"),
                hr(),
                downloadButton("report", "Generate report")
         )
-    )
+    ),
+    br(),
+    a("https://github.com/wbakerrobinson/CS586_Project")
 )
 readCSVparam <- function(inFile)
 {
