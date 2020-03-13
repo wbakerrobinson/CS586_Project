@@ -31,14 +31,6 @@ dbName <- params$dbName
 username <- params$username
 password <- params$password
 renderVal <- 4
-UpdateProgress <- function(renderVal, renderByShiny)
-{
-  if(renderByShiny & renderVal < 25)
-  {
-    shiny::setProgress(renderVal/25)
-    renderVal = renderVal + 1
-  }
-}
 ```
 
 ```{python connect to database}

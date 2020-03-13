@@ -1,15 +1,8 @@
-# Reading in the .csv file
+# Cleaning script adapted as a function to clean availability survey read in from shiny
+# just turned scheduling.R into a function
 
-library(readxl)
-library(stringr)
-library(tibble)
-library(dplyr)
-
-scheduling_raw <- read_excel(
-  ".\\Example Data\\Example Survey 1 Response Data.xlsx")
-
-# Renaming columns to make more intuitive sense for the onlooker
-
+availability_clean <- function(scheduling_raw)
+{
 names(scheduling_raw) <- c("time", "name", "email", "mon_half1",
                            "tue_half1", "wed_half1", "thu_half1",
                            "fri_half1", "sat_half1", "sun_half1",
@@ -342,4 +335,6 @@ for(i in 1:nrow(scheduling_raw)){
                                       unavailability = unlist(scheduling_raw[i, "unavail_dates"]),
                                       other = unlist(scheduling_raw[i, "other"]))
   }
+}
+return(student, availability, availability_rel, availability_comments)
 }
