@@ -27,6 +27,10 @@ ui <- fluidPage(theme = shinytheme("superhero"),
                fileInput("eligible", 
                          label = "Eligibility Criteria", 
                          multiple = FALSE),
+                         accept = c(
+                            "text/csv",
+                            "text/comma-separated-values,text/plain",
+                            ".csv"),
                fileInput("projInfo", label = "Project Data", multiple = FALSE,
                          accept = c(
                             "text/csv",
@@ -53,13 +57,6 @@ readCSVparam <- function(inFile)
     else
         return(read.csv(inFile$datapath))
 }
-readXLparam <- function(inFile)
-{
-    if(is.null(inFile))
-        return(NULL)
-    else
-        return(read_excel(inFile$datapath))
-}
 
 server <- function(input, output)
 {
@@ -72,7 +69,7 @@ server <- function(input, output)
                 #parameters passed to .rmd
                 params <- list(availSurv = readCSVparam(input$availSurv), 
                                projSurv = readCSVparam(input$projSurv), 
-                               eligible = readXLparam(input$eligible),
+                               eligible = readCSVparam(input$eligible),
                                projInfo = readCSVparam(input$projInfo), 
                                host = input$host,
                                dbName = input$dbname,
