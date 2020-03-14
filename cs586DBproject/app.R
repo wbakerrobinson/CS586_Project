@@ -4,7 +4,6 @@ source("availability_clean_fx.R")
 source("projects_clean_fx.R")
 source("projects_clean_fx.R")
 
-
 # Define UI for application that takes input
 ui <- fluidPage(theme = shinytheme("superhero"),
     titlePanel("Portland State CS Capstone Survey Analysis"),

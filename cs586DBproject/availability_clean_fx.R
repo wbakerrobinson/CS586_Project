@@ -1,7 +1,7 @@
 # Cleaning script adapted as a function to clean availability survey read in from shiny
 # just turned scheduling.R into a function
 
-availability_clean <- function(scheduling_raw)
+AvailabilityClean <- function(scheduling_raw)
 {
 names(scheduling_raw) <- c("time", "name", "email", "mon_half1",
                            "tue_half1", "wed_half1", "thu_half1",

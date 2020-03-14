@@ -71,22 +71,22 @@ if(py$connected == TRUE){
   print("Connected to the DB this is where I am going to clean")
   if(!is.null(params$availSurv))
   {
-    # if true clean
+    availabilityDfs <- AvailabilityClean(params$availSurv)
     availSurvBool <- TRUE
   }
   if(!is.null(params$projSurv))
   {
-    # if true clean
+    projectDfs <- ProjectsClean(params$projSurv)
     projSurvBool <- TRUE
   }
   if(!is.null(params$eligible))
   {
-    # if true clean
+    eligibleDfs <- GradesClean(params$eligible)
     eligibleBool <- TRUE
   }
   if(!is.null(params$projectInfo))
   {
-    # if true clean
+    # not sure about where the projectInfo doc is cleaned
     projectInfoBool <- TRUE
   }
   if(availSurvBool | projSurvBool | eligibleBool | projInfoBool)
