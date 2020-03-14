@@ -1,20 +1,8 @@
-# Let survey_2 be the .csv file for the student
-# responses to the projects question and project_desc
-# the table of the project descriptions and contact information
-
-# This function outputs a project rel table
-
-projects <- function(survey_2, project_desc){
-
-<<<<<<< HEAD
-names(projects_raw) <- c("time", "student_id", "email", "name", "p1_interest",
-=======
-  projects_raw <- survey_2
-
-  # Making shorter attribute names
-
-  names(projects_raw) <- c("time", "student_id", "email", "name", "p1_interest",
->>>>>>> d2ca5f9f9abf72ef2c6b4bbfbcf6926bc7b85a0f
+# Projects script adapted as a function to be run on projInfo from shiny
+ProjectsClean <- function(projects_raw)
+{
+# Making shorter attribute names
+names(projects_raw) <- c("time", "email", "name", "p1_interest",
                          "p1_confidence", "p1_comments", "p2_interest", 
                          "p2_confidence", "p2_comments", "p3_interest",
                          "p3_confidence", "p3_comments", "p4_interest", 
@@ -28,36 +16,36 @@ names(projects_raw) <- c("time", "student_id", "email", "name", "p1_interest",
                          "enjoyed", "languages", "work", "roles", "know_about",
                          "understandings1", "understandings2", "other")
 
-<<<<<<< HEAD
-# Reading in the projects spreadsheet
+# Placeholder for student id
 
-project <- read_csv(
-  ".\\data\\ProjectData - Sheet1.csv", col_types = cols())
-=======
-  project <- project_desc
->>>>>>> d2ca5f9f9abf72ef2c6b4bbfbcf6926bc7b85a0f
+projects_raw$student_id <- 1:nrow(projects_raw)
 
-  names(project) <- c("project_id", "organization", "contact",
-                    "contact_email", "project_name", "description")
+project <- data.frame(project_id = 1:8,
+                      contact = vector("character", 8),
+                      contact_email = vector("character", 8),
+                      organization = vector("character", 8),
+                      description = vector("character", 8),
+                      stringsAsFactors = F)
 
-  project_rel <- data.frame(project_id = vector("numeric"),
+project_rel <- data.frame(project_id = vector("numeric"),
                           student_id = vector("numeric"),
                           interest = vector("numeric"),
                           confidence = vector("numeric"),
                           comment = vector("character"),
                           stringsAsFactors = F)
 
-  for(i in 1:nrow(projects_raw)){
-    for(j in 1:8){
-      c1 <- which(names(projects_raw) == paste0("p", j, "_interest"))
-      c2 <- which(names(projects_raw) == paste0("p", j, "_confidence"))
-      c3 <- which(names(projects_raw) == paste0("p", j, "_comments"))
-      project_rel <- add_case(project_rel,
+for(i in 1:nrow(projects_raw)){
+  for(j in 1:8){
+    c1 <- which(names(projects_raw) == paste0("p", j, "_interest"))
+    c2 <- which(names(projects_raw) == paste0("p", j, "_confidence"))
+    c3 <- which(names(projects_raw) == paste0("p", j, "_comments"))
+    project_rel <- add_case(project_rel,
                             student_id = projects_raw[i, "student_id"],
                             project_id = j,
                             interest = unlist(projects_raw[i, c1]),
                             confidence = unlist(projects_raw[i, c2]),
                             comment = unlist(projects_raw[i, c3]))
-    }
   }
+}
+return(project, project_rel)
 }

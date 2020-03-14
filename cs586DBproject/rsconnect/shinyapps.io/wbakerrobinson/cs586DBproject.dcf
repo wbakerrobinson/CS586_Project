@@ -1,0 +1,13 @@
+name: cs586DBproject
+title: cs586DBproject
+username:
+account: wbakerrobinson
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1943420
+bundleId: 2876794
+url: https://wbakerrobinson.shinyapps.io/cs586DBproject/
+when: 1584063752.1188
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Cleaning.Rmd|grades.R|projects.R|scheduling.R
