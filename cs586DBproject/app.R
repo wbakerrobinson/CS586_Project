@@ -1,12 +1,5 @@
-<<<<<<< HEAD
-
-=======
 # Load R functions and libraries
-source("library_and_non_cleaning_fx.R")
-source("availability_clean_fx.R")
-source("projects_clean_fx.R")
-source("projects_clean_fx.R")
->>>>>>> 57c380614fe982af033fd83e19a5d58d3447cfb4
+source("library_and_functions_shiny.R")
 
 # Define UI for application that takes input
 ui <- fluidPage(theme = shinytheme("superhero"),
