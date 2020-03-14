@@ -5,9 +5,9 @@ account: wbakerrobinson
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1943420
-bundleId: 2876794
+bundleId: 2880149
 url: https://wbakerrobinson.shinyapps.io/cs586DBproject/
-when: 1584063752.1188
+when: 1584151761.05497
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Cleaning.Rmd|grades.R|projects.R|scheduling.R
+ignoredFiles: grades.R|projects.R|scheduling.R
