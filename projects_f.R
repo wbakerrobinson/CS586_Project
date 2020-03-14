@@ -7,21 +7,13 @@
 
 # projects <- function(survey_2, project_desc){
 
-<<<<<<< HEAD
   # projects_raw <- survey_2
   projects_raw <- readr::read_csv(".\\data\\Survey_2_Responses_Data.csv",
                                   col_types = readr::cols())
-=======
-<<<<<<< HEAD
-names(projects_raw) <- c("time", "student_id", "email", "name", "p1_interest",
-=======
-  projects_raw <- survey_2
->>>>>>> eb9aa87ef861f0a7b68c22e4c957cdac02e75a05
 
   # Making shorter attribute names
 
   names(projects_raw) <- c("time", "student_id", "email", "name", "p1_interest",
->>>>>>> d2ca5f9f9abf72ef2c6b4bbfbcf6926bc7b85a0f
                          "p1_confidence", "p1_comments", "p2_interest", 
                          "p2_confidence", "p2_comments", "p3_interest",
                          "p3_confidence", "p3_comments", "p4_interest", 
@@ -35,14 +27,9 @@ names(projects_raw) <- c("time", "student_id", "email", "name", "p1_interest",
                          "enjoyed", "languages", "work", "roles", "know_about",
                          "understandings1", "understandings2", "other")
 
-<<<<<<< HEAD
 # Reading in the projects spreadsheet
 
-project <- read_csv(
-  ".\\data\\ProjectData - Sheet1.csv", col_types = cols())
-=======
   project <- project_desc
->>>>>>> d2ca5f9f9abf72ef2c6b4bbfbcf6926bc7b85a0f
 
   names(project) <- c("project_id", "organization", "contact",
                     "contact_email", "project_name", "description")
