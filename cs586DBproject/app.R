@@ -57,8 +57,8 @@ server <- function(input, output)
         filename = "cs586Project.html",
         content = function(file){
             withProgress(message = 'Rendering, please wait!', {
-                tempReport <- file.path(tempdir(), "cs586Project.Rmd")
-                file.copy("cs586Project.Rmd", tempReport, overwrite = TRUE)
+                tempReport <- file.path(tempdir(), "cs586project.Rmd")
+                file.copy("cs586project.Rmd", tempReport, overwrite = TRUE)
                 #parameters passed to .rmd
                 params <- list(availSurv = ReadCsvParam(input$availSurv), 
                                projSurv = ReadCsvParam(input$projSurv), 
