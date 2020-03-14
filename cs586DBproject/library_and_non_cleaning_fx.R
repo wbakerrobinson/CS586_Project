@@ -1,6 +1,7 @@
 # load all necessar R libraries
 library(shiny)
 library(shinythemes)
+library(tidyr)
 library(reticulate)
 library(stringr)
 library(tibble)
