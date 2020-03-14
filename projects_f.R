@@ -2,11 +2,14 @@
 # responses to the projects question and project_desc
 # the table of the project descriptions and contact information
 
-# This function outputs a project rel table
+# This function outputs a project rel table,
+# work_style table, interest table, and skill table
 
-projects <- function(survey_2, project_desc){
+# projects <- function(survey_2, project_desc){
 
-  projects_raw <- survey_2
+  # projects_raw <- survey_2
+  projects_raw <- readr::read_csv(".\\data\\Survey_2_Responses_Data.csv",
+                                  col_types = readr::cols())
 
   # Making shorter attribute names
 
@@ -49,4 +52,24 @@ projects <- function(survey_2, project_desc){
                             comment = unlist(projects_raw[i, c3]))
     }
   }
-}
+  
+  interest <- projects_raw[, c("student_id",
+                                 "s_interest_m",
+                                 "s_interest_l",
+                                 "interested",
+                                 "enjoyed")]
+  
+  skill <- projects_raw[, c("student_id",
+                               "s_knowledge_m",
+                               "s_knowledge_l",
+                               "familiar",
+                               "strength",
+                               "weakness",
+                               "languages")]
+  
+  work_style <- projects_raw[, c("student_id",
+                                 "work",
+                                 "roles",
+                                 "know_about",
+                                 "other")]
+# }
