@@ -34,9 +34,8 @@ renderVal <- 4
 ```
 
 ```{python connect to database}
-source_python()
-import psycopg2
-import pandas
+import(psycopg2)
+import(pandas)
 
 connected = True
 dbData = False
