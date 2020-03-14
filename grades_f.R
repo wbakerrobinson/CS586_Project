@@ -164,5 +164,3 @@ grading <- function(prerequisites){
     }
   }
 }
-
-rm(list = setdiff(ls(), c("availability", "availability_comments", "availability_rel", "grade", "grade_rel", "project", "project_rel", "student")))
