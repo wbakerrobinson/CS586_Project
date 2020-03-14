@@ -53,11 +53,28 @@ except:
     connected = False
 if(connected):
     cur = conn.cursor()
-    # Create function to check which tables have data!
-    cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'student';")
-    student = cur.fetchone()
-if(student is not None):
-    dbData = True
+    table_names = ['student','availability', 'availability_rel', 'availability_comments', 'project', 
+    'project_rel', 'grade_rel', 'grade', 'work_style']
+    table_exists = []
+    data_exists = []
+    exists = 0
+    has_data = 0
+    for(i in 0:12)
+    {
+      cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = %s", (table_names[i]))
+      exists = cur.fetchone()[1]
+      table_exists.append(exists)
+      if(exists):
+      {
+        cur.execute("SELECT 1 FROM %s", (table_names[i]))
+        has_data = cur.fetchone()[1]
+        data_exists.append(has_data)
+      }
+      else:
+        data_exists.append(0)
+    }
+if(table_exists[0] == 1):
+    ddl_run = True
 ```
 
 ```{r check user uploads and clean}
@@ -73,17 +90,14 @@ if(py$connected == TRUE){
   print("Connected to the DB this is where I am going to clean")
   if(!is.null(params$availSurv))
   {
-    availabilityDfs <- AvailabilityClean(params$availSurv)
     availSurvBool <- TRUE
   }
   if(!is.null(params$projSurv))
   {
-    projectDfs <- ProjectsClean(params$projSurv)
     projSurvBool <- TRUE
   }
   if(!is.null(params$eligible))
   {
-    eligibleDfs <- GradesClean(params$eligible)
     eligibleBool <- TRUE
   }
   if(!is.null(params$projectInfo))
