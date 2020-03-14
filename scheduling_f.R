@@ -1,6 +1,13 @@
+# Reading in the .csv file
 
-AvailabilityClean <- function(scheduling_raw)
-{
+library(readr)
+library(stringr)
+library(tibble)
+library(dplyr, warn.conflicts = F)
+
+scheduling_raw <- read_csv(
+  ".\\data\\Survey_1_Response_Data.csv", col_types = cols())
+
 # Renaming columns to make more intuitive sense for the onlooker
 
 names(scheduling_raw) <- c("time", "name", "email", "mon_half1",
@@ -40,7 +47,7 @@ scheduling_raw <- scheduling_raw[, c("time", "student_id", "name", "email", "mon
 # 5: Saturday
 # 6: Sunday
 
-days <- c(0, 1, 2, 3, 4, 5, 6)
+days <- 0:6
 
 # 0: First half of the day (6:00 am - 2:00 pm)
 # 1: Second half of the day (3:00 pm - 11:00 pm)
@@ -71,8 +78,8 @@ descriptions <- c(0, 1)
 # 16: 10:00 pm
 # 17: 11:00 pm
 
-half1 <- c(0, 1, 2, 3, 4, 5, 6, 7, 8)
-half2 <- c(9, 10, 11, 12, 13, 14, 15, 16, 17)
+half1 <- 0:8
+half2 <- 9:17
 
 # Essentially, a lookup table for possible availabilities
 
@@ -335,6 +342,4 @@ for(i in 1:nrow(scheduling_raw)){
                                       unavailability = unlist(scheduling_raw[i, "unavail_dates"]),
                                       other = unlist(scheduling_raw[i, "other"]))
   }
-}
-return(student, availability, availability_rel, availability_comments)
 }

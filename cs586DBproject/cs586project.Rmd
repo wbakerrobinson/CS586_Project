@@ -31,6 +31,14 @@ dbName <- params$dbName
 username <- params$username
 password <- params$password
 renderVal <- 4
+UpdateProgress <- function(renderVal, renderByShiny)
+{
+  if(renderByShiny & renderVal < 25)
+  {
+    shiny::setProgress(renderVal/25)
+    renderVal = renderVal + 1
+  }
+}
 ```
 
 ```{python connect to database}
@@ -71,22 +79,22 @@ if(py$connected == TRUE){
   print("Connected to the DB this is where I am going to clean")
   if(!is.null(params$availSurv))
   {
-    availabilityDfs <- AvailabilityClean(params$availSurv)
+    # if true clean
     availSurvBool <- TRUE
   }
   if(!is.null(params$projSurv))
   {
-    projectDfs <- ProjectsClean(params$projSurv)
+    # if true clean
     projSurvBool <- TRUE
   }
   if(!is.null(params$eligible))
   {
-    eligibleDfs <- GradesClean(params$eligible)
+    # if true clean
     eligibleBool <- TRUE
   }
   if(!is.null(params$projectInfo))
   {
-    # not sure about where the projectInfo doc is cleaned
+    # if true clean
     projectInfoBool <- TRUE
   }
   if(availSurvBool | projSurvBool | eligibleBool | projInfoBool)
@@ -128,16 +136,13 @@ else:
 # 20 Questions     
 ## Interst Level  
 ### Count the number of students interested in each project:  
-_# of students with interest level greater than 5_  
 
 ### Count the number of times a project was selected as a top 3 choice:  
 
 ### Are there more students who marked low interest in all projects than students who marked high interest in all projects?  
 _How to define low vs. high interest?_  
 
-### Output a list of the 5 students who have the highest interest level for each project:  
-
-### Create a scatterplot of interest level and confidence to complete each project:  
+### How many students listed more than 5 skills or subjects that interest them the most?  
 
 ### What skills are students most interested in?  
 
@@ -146,10 +151,13 @@ _How to define low vs. high interest?_
 _Create a heatmap_
 
 ### Plot students time availability stratified by 1st choice of project:  
+_Bonus make a html widget that includes names_
 
 ### Plot students time availability stratified by 2nd choice of project:  
+_Bonus make a html widget that includes names_
 
 ### Plot students time availability stratified by 3rd choice of project:  
+_Bonus make a html widget that includes names_
 
 ### What proportion of students perfer times before 10:00 Am?
 
