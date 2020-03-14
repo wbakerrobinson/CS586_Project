@@ -34,6 +34,7 @@ renderVal <- 4
 ```
 
 ```{python connect to database}
+source_python()
 import psycopg2
 import pandas
 
@@ -68,6 +69,7 @@ availSurvBool <- FALSE
 projSurvBool <- FALSE
 eligibleBool <- FALSE
 projInfoBool <- FALSE
+# BEFORE CLEANING CHECK IF CAN UPLOAD!!!
 if(py$connected == TRUE){
   print("Connected to the DB this is where I am going to clean")
   if(!is.null(params$availSurv))
