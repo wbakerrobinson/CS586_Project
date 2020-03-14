@@ -1,12 +1,12 @@
 # Reading in the .csv file
 
-library(readxl)
+library(readr)
 library(stringr)
 library(tibble)
-library(dplyr)
+library(dplyr, warn.conflicts = F)
 
-scheduling_raw <- read_excel(
-  ".\\Example Data\\Example Survey 1 Response Data.xlsx")
+scheduling_raw <- read_csv(
+  "..\\data\\Survey_1_Response_Data.csv", col_types = cols())
 
 # Renaming columns to make more intuitive sense for the onlooker
 

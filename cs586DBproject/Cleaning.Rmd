@@ -30,7 +30,7 @@ source("./projects.r")
 
 ## Data cleaning associated with the spreadsheet containing students' grades
 
-### Includes creation of the course table and course_rel table
+### Includes creation of the grade table and grade_rel table
 
 ```{r, warning = F, code = readLines("grades.R")}
 

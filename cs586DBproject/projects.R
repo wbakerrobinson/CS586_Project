@@ -1,7 +1,7 @@
 # Reading in the .csv file
 
-projects_raw <- read_excel(
-  ".\\Example Data\\Example Survey 2 Responses Data.xlsx")
+projects_raw <- read_csv(
+  "..\\data\\Survey_2_Responses_Data.csv", col_types = cols())
 
 # Making shorter attribute names
 
@@ -23,12 +23,13 @@ names(projects_raw) <- c("time", "email", "name", "p1_interest",
 
 projects_raw$student_id <- 1:nrow(projects_raw)
 
-project <- data.frame(project_id = 1:8,
-                      contact = vector("character", 8),
-                      contact_email = vector("character", 8),
-                      organization = vector("character", 8),
-                      description = vector("character", 8),
-                      stringsAsFactors = F)
+# Reading in the projects spreadsheet
+
+project <- read_csv(
+  "..\\data\\ProjectData - Sheet1.csv", col_types = cols())
+
+names(project) <- c("project_id", "organization", "contact",
+                    "contact_email", "project_name", "description")
 
 project_rel <- data.frame(project_id = vector("numeric"),
                           student_id = vector("numeric"),

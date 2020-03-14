@@ -2,8 +2,8 @@
 
 library(tidyr)
 
-grades_raw <- read_excel(
-  ".\\data\\Example_Capstone_Prerequisite_Data.xlsx")
+grades_raw <- read_csv(
+  "..\\data\\Example_Capstone_Prerequisite_Data.csv", col_types = cols())
 
 grades_long <- gather(grades_raw, class, grade, c("CS161",
                                                   "CS162",
@@ -65,29 +65,29 @@ course <- 0:11
 # 20: M
 # 21: RF
 
-grade <- 0:21
+grade_value <- 0:21
 
 # Essentially, a lookup table for possible grades
 
-grades <- data.frame(course = vector("numeric"),
-                     grade = vector("numeric"))
+grade <- data.frame(course = vector("numeric"),
+                     grade_value = vector("numeric"))
 
 # Populating the lookup table
 
 for(k in course){
-  for(l in grade){
-    grades <- rbind(grades, c(k, l))
+  for(l in grade_value){
+    grade <- rbind(grade, c(k, l))
   }
 }
 
-# Creating a grades primary key
+# Creating a grade primary key
 
-grades <- cbind(1:nrow(grades), grades)
+grade <- cbind(1:nrow(grade), grade)
 
-names(grades) <- c("grade_id", "course",
-                   "grade")
+names(grade) <- c("grade_id", "course",
+                   "grade_value")
 
-grades[, "course"] <- factor(grades[, "course"],
+grade[, "course"] <- factor(grade[, "course"],
                              labels = c("CS161",
                                         "CS162",
                                         "CS163",
@@ -101,7 +101,7 @@ grades[, "course"] <- factor(grades[, "course"],
                                         "CS350",
                                         "PPP"))
 
-grades[, "grade"] <- factor(grades[, "grade"],
+grade[, "grade_value"] <- factor(grade[, "grade_value"],
                             labels = c("A",
                                        "A-",
                                        "B+",
@@ -127,8 +127,8 @@ grades[, "grade"] <- factor(grades[, "grade"],
 
 # Creating the rel table for the many-to-many relationship
 
-grades_rel <- as.tbl(data.frame(student_id = vector("numeric"),
-                                grades_id = vector("numeric")))
+grade_rel <- as.tbl(data.frame(student_id = vector("numeric"),
+                                grade_id = vector("numeric")))
 # Populating the rel table
 
 for(i in 1:nrow(grades_long)){
@@ -138,25 +138,25 @@ for(i in 1:nrow(grades_long)){
     multiple <- sapply(multiple, trimws)
     for(j in 1:length(multiple)){
       course_name <- unlist(grades_long[i, "class"])
-      matches_c <- which(as.character(grades$course) == course_name)
+      matches_c <- which(as.character(grade$course) == course_name)
       grade_name <- unlist(grades_long[i, "grade"])
-      matches_g <- which(as.character(grades$grade) == multiple[j])
-      grades_rel <- add_case(grades_rel, 
+      matches_g <- which(as.character(grade$grade_value) == multiple[j])
+      grade_rel <- add_case(grade_rel, 
                              student_id = grades_long$student_id[i],
-                             grades_id = unlist(grades[matches_g[matches_g %in% 
+                             grade_id = unlist(grade[matches_g[matches_g %in% 
                                                                    matches_c], "grade_id"]))
     }
   }else if(!is.na(str_detect(grades_long$grade[i], ",")) &
            str_detect(grades_long$grade[i], ",") == F){
     course_name <- unlist(grades_long[i, "class"])
-    matches_c <- which(as.character(grades$course) == course_name)
+    matches_c <- which(as.character(grade$course) == course_name)
     grade_name <- unlist(grades_long[i, "grade"])
-    matches_g <- which(as.character(grades$grade) == grade_name)
-    grades_rel <- add_case(grades_rel, 
+    matches_g <- which(as.character(grade$grade_value) == grade_name)
+    grade_rel <- add_case(grade_rel, 
                            student_id = grades_long$student_id[i],
-                           grades_id = unlist(grades[matches_g[matches_g %in% 
+                           grade_id = unlist(grade[matches_g[matches_g %in% 
                                                                  matches_c], "grade_id"]))
   }
 }
 
-rm(list = setdiff(ls(), c("availability", "availability_comments", "availability_rel", "grades", "grades_rel", "project", "project_rel", "student")))
+rm(list = setdiff(ls(), c("availability", "availability_comments", "availability_rel", "grade", "grade_rel", "project", "project_rel", "student")))
