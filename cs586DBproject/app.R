@@ -1,7 +1,8 @@
-library(shiny)
-library(shinythemes)
-library(readxl)
-library(reticulate)
+# Load R functions and libraries
+source("library_and_non_cleaning_fx.R")
+source("availability_clean_fx.R")
+source("projects_clean_fx.R")
+source("projects_clean_fx.R")
 
 # Define UI for application that takes input
 ui <- fluidPage(theme = shinytheme("superhero"),
@@ -49,13 +50,6 @@ ui <- fluidPage(theme = shinytheme("superhero"),
     br(),
     a("https://github.com/wbakerrobinson/CS586_Project")
 )
-readCSVparam <- function(inFile)
-{
-    if(is.null(inFile))
-        return(NULL)
-    else
-        return(read.csv(inFile$datapath))
-}
 
 server <- function(input, output)
 {
@@ -66,10 +60,10 @@ server <- function(input, output)
                 tempReport <- file.path(tempdir(), "cs586Project.Rmd")
                 file.copy("cs586Project.Rmd", tempReport, overwrite = TRUE)
                 #parameters passed to .rmd
-                params <- list(availSurv = readCSVparam(input$availSurv), 
-                               projSurv = readCSVparam(input$projSurv), 
-                               eligible = readCSVparam(input$eligible),
-                               projInfo = readCSVparam(input$projInfo), 
+                params <- list(availSurv = ReadCsvParam(input$availSurv), 
+                               projSurv = ReadCsvParam(input$projSurv), 
+                               eligible = ReadCsvParam(input$eligible),
+                               projInfo = ReadCsvParam(input$projInfo), 
                                host = input$host,
                                dbName = input$dbname,
                                username = input$username,
