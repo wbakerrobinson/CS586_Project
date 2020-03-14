@@ -53,6 +53,7 @@ except:
     connected = False
 if(connected):
     cur = conn.cursor()
+    # Create function to check which tables have data!
     cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'student';")
     student = cur.fetchone()
 if(student is not None):

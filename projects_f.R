@@ -6,11 +6,15 @@
 
 projects <- function(survey_2, project_desc){
 
+<<<<<<< HEAD
   projects_raw <- survey_2
 
   # Making shorter attribute names
 
   names(projects_raw) <- c("time", "student_id", "email", "name", "p1_interest",
+=======
+names(projects_raw) <- c("time", "email", "name", "p1_interest",
+>>>>>>> 99dcaf7362ddfb93639a501a270f297821e0a80f
                          "p1_confidence", "p1_comments", "p2_interest", 
                          "p2_confidence", "p2_comments", "p3_interest",
                          "p3_confidence", "p3_comments", "p4_interest", 
@@ -24,7 +28,15 @@ projects <- function(survey_2, project_desc){
                          "enjoyed", "languages", "work", "roles", "know_about",
                          "understandings1", "understandings2", "other")
 
+<<<<<<< HEAD
   # Reading in the projects spreadsheet
+=======
+# Placeholder for student id
+
+projects_raw$student_id <- 1:nrow(projects_raw)
+
+# Reading in the projects spreadsheet
+>>>>>>> 99dcaf7362ddfb93639a501a270f297821e0a80f
 
   project <- project_desc
 
