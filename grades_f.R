@@ -6,9 +6,7 @@ library(tidyr)
 
 grading <- function(prerequisites){
 
-  suppressWarnings(grades_raw <- read_csv(
-    ".\\data\\Example_Capstone_Prerequisite_Data.csv", 
-    col_types = cols()))
+  suppressWarnings(grades_raw <- prerequisites)
   
   grades_long <- gather(grades_raw, class, grade, c("CS161",
                                                     "CS162",
