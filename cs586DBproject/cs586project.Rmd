@@ -92,7 +92,7 @@ if(py$connected == TRUE){
   if(py$ddl_run == 0 & !is.null(params$availSurv))
   {
     cleanAvailVec <- scheduling(params$availSurv)
-    student <- cleanAvailVec[1]
+    student <- cleanAvailVec[[1]]
     str(student)
     availSurvBool <- TRUE
   }
@@ -101,14 +101,14 @@ if(py$connected == TRUE){
     if(py$data_exists[1] == 0 & !is.null(params$projSurv) & !is.null(params$projInfo))
     {
       cleanProjVec <- projects(params$projSurv, params$projInfo) 
-      project <- cleanProjVec[1]
+      project <- cleanProjVec[[1]]
       str(project)
       projSurvBool <- TRUE
     }
     if(py$data_exists[2] == 0 & !is.null(params$eligible))
     {
       cleanGradeVec <- grading(params$eligible)
-      grade <- cleanGradeVec[1]
+      grade <- cleanGradeVec[[1]]
       str(grade)
       eligibleBool <- TRUE
     }
