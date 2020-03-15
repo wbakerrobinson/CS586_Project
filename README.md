@@ -5,4 +5,4 @@ Some notes about our program:
 1. This program will create a database of the information supplied on whichiver database you provide credentials for. This should work as long as the database is Postgres.  
 2. After the database is created you will recieve a document as a .html file with answers to our 20 questions.  
 3. If there are no files submitted at the start, the program will attempt to connect to the database and run the report.  
-4. We expect .csv files for all data
+4. We expect .csv files for all data.
