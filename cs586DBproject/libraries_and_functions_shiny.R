@@ -7,7 +7,7 @@ ReadCsvParam <- function(inFile)
   if(is.null(inFile))
     return(NULL)
   else
-    return(read.csv(inFile$datapath))
+    return(read_csv(inFile$datapath))
 }
 
 UpdateProgress <- function(renderVal, renderByShiny)
