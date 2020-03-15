@@ -1,7 +1,7 @@
 library(tibble)
 
 # Let survey_2 be the .csv file for the student
-# responses to the projects question and project_desc
+# responses to the projects questions and project_desc
 # the table of the project descriptions and contact information
 
 # This function outputs a interest table, skill table,

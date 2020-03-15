@@ -4,7 +4,7 @@ library(tibble)
 library(dplyr, warn.conflicts = F)
 
 # Let survey_1 be the .csv file for the student
-# responses to the scheduling question
+# responses to the scheduling questions
 
 # This function outputs a student table, an availability table,
 # an availability_comments table, and an availability_rel table
