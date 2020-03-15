@@ -1,5 +1,5 @@
 # Load R functions and libraries
-source("library_and_functions_shiny.R")
+source("libraries_and_functions_shiny.R")
 
 # Define UI for application that takes input
 ui <- fluidPage(theme = shinytheme("superhero"),
