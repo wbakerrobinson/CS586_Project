@@ -332,5 +332,5 @@ scheduling <- function(survey_1){
                                       other = unlist(scheduling_raw[i, "other"]))
     }
   }
-  return(student, availability, availability_rel, availability_comments)
+  return(list(student, availability, availability_rel, availability_comments))
 }

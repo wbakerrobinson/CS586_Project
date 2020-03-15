@@ -91,23 +91,24 @@ if(py$connected == TRUE){
   print("Connected to the DB this is where I am going to clean")
   if(py$ddl_run == 0 & !is.null(params$availSurv))
   {
-    scheduling(params$availSurv)
+    cleanAvailVec <- scheduling(params$availSurv)
+    student <- cleanAvailVec[1]
     str(student)
-    str(availability_rel)
     availSurvBool <- TRUE
   }
   if(!is.null(params$availSurv) | py$ddl_run == 1)
   {
     if(py$data_exists[1] == 0 & !is.null(params$projSurv) & !is.null(params$projInfo))
     {
-      projects(params$projSurv, params$projInfo) 
+      cleanProjVec <- projects(params$projSurv, params$projInfo) 
+      project <- cleanProjVec[1]
       str(project)
-      str(project_rel)
       projSurvBool <- TRUE
     }
     if(py$data_exists[2] == 0 & !is.null(params$eligible))
     {
-      grading(params$eligible)
+      cleanGradeVec <- grading(params$eligible)
+      grade <- cleanGradeVec[1]
       str(grade)
       eligibleBool <- TRUE
     }

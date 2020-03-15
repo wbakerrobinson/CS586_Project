@@ -161,5 +161,5 @@ grading <- function(prerequisites){
                                                                    matches_c], "grade_id"]))
     }
   }
-  return(grade, grade_rel)
+  return(list(grade, grade_rel))
 }

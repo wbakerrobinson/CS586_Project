@@ -357,5 +357,5 @@ projects <- function(survey_2, project_desc){
   }
   
   interested_rel[["interested_id"]] <- as.factor(interested_rel[["interested_id"]])
-  return(interest, skill, work_style, project_rel, role_rel, familiar_rel, interested_rel)
+  return(list(interest, skill, work_style, project_rel, role_rel, familiar_rel, interested_rel))
 }
