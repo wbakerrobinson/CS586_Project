@@ -1,5 +1,5 @@
 # Load R functions and libraries
-source("libraries_and_functions_shiny.R")
+source("./libraries_and_functions_shiny.R")
 source("../grades_f.R")
 source("../projects_f.R")
 source("../scheduling_f.R")

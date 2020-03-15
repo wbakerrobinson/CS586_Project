@@ -10,10 +10,11 @@ ReadCsvParam <- function(inFile)
     return(read.csv(inFile$datapath))
 }
 
-readCSVparam <- function(inFile)
+UpdateProgress <- function(renderVal, renderByShiny)
 {
-  if(is.null(inFile))
-    return(NULL)
-  else
-    return(read.csv(inFile$datapath))
+  if(renderByShiny & renderVal < 25)
+  {
+    shiny::setProgress(renderVal/25)
+    renderVal = renderVal + 1
+  } 
 }
