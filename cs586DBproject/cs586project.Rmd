@@ -81,18 +81,19 @@ if(py$connected == TRUE){
   print("Connected to the DB this is where I am going to clean")
   if(py$ddl_run == 0)
   {
-    # clean student
+    scheduling(params$availSurv)
     availSurvBool <- TRUE
   }
   if(!is.null(params$availSurv) | py$ddl_run == 1)
   {
     if(py$data_exists[1] == 0 & !is.null(params$projSurv) & !is.null(params$projInfo))
     {
-      # clean project
+      projects(params$projSurv, params$projInfo) 
       projSurvBool <- TRUE
     }
     if(py$data_exists[2] == 0 & !is.null(params$eligible))
     {
+      grading(params$eligible)
       eligibleBool <- TRUE
     }
   }
