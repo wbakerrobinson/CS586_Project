@@ -34,8 +34,8 @@ renderVal <- 4
 ```
 
 ```{python connect to database}
-import(psycopg2)
-import(pandas)
+import psycopg2
+import pandas
 
 connected = True
 dbData = False
@@ -53,11 +53,30 @@ except:
     connected = False
 if(connected):
     cur = conn.cursor()
-    # Create function to check which tables have data!
     cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'student';")
-    student = cur.fetchone()
-if(student is not None):
-    dbData = True
+    if(cur.fetchone() is None):
+      ddl_run = 0
+    else:
+      ddl_run = 1
+    data_exists = []
+    has_data = 0
+    # fix with None
+    if(ddl_run):
+      cur.execute("SELECT 1 FROM project;")
+      if(cur.fetchone() is None):
+        has_data = 0
+      else:
+        has_data = 1
+      data_exists.append(has_data)
+      cur.execute("SELECT 1 FROM grade;")
+      if(cur.fetchone() is None):
+        has_data = 0
+      else:
+        has_data = 1
+      data_exists.append(has_data)
+    else:
+      data_exists.append(0)
+      data_exists.append(0)
 ```
 
 ```{r check user uploads and clean}
@@ -67,33 +86,31 @@ userData <- FALSE
 availSurvBool <- FALSE
 projSurvBool <- FALSE
 eligibleBool <- FALSE
-projInfoBool <- FALSE
-# BEFORE CLEANING CHECK IF CAN UPLOAD!!!
+
 if(py$connected == TRUE){
   print("Connected to the DB this is where I am going to clean")
-  if(!is.null(params$availSurv))
+  if(py$ddl_run == 0 & !is.null(params$availSurv))
   {
-    availabilityDfs <- AvailabilityClean(params$availSurv)
+    scheduling(params$availSurv)
+    str(student)
+    str(availability_rel)
     availSurvBool <- TRUE
   }
-  if(!is.null(params$projSurv))
+  if(!is.null(params$availSurv) | py$ddl_run == 1)
   {
-    projectDfs <- ProjectsClean(params$projSurv)
-    projSurvBool <- TRUE
-  }
-  if(!is.null(params$eligible))
-  {
-    eligibleDfs <- GradesClean(params$eligible)
-    eligibleBool <- TRUE
-  }
-  if(!is.null(params$projectInfo))
-  {
-    # not sure about where the projectInfo doc is cleaned
-    projectInfoBool <- TRUE
-  }
-  if(availSurvBool | projSurvBool | eligibleBool | projInfoBool)
-  {
-    userData <- TRUE
+    if(py$data_exists[1] == 0 & !is.null(params$projSurv) & !is.null(params$projInfo))
+    {
+      projects(params$projSurv, params$projInfo) 
+      str(project)
+      str(project_rel)
+      projSurvBool <- TRUE
+    }
+    if(py$data_exists[2] == 0 & !is.null(params$eligible))
+    {
+      grading(params$eligible)
+      str(grade)
+      eligibleBool <- TRUE
+    }
   }
 }
 UpdateProgress(renderVal, params$rendered_by_shiny)
@@ -101,26 +118,20 @@ UpdateProgress(renderVal, params$rendered_by_shiny)
 
 ```{python update or upload}
 canQuery = False
-
-if (connected == True and r.userData == True and dbData == False):
+if (connected == True and r.availSurvBool == True and ddl_run == False):
   print("Connected, user supplied data, and db is empty")
   # run ddl 
   # upload all...
   canQuery = True
-elif (connected == True and r.userData == True and dbData == True):
-  #Will create if have time for now nothing done with data just produces report.
-    #find where new data starts in student avail
-    #assumption is that only the survey 1 & 2 data will be uploaded and updated like this
-    #compare new section to prev to check for duplicate stu id
-    # keep track of all id which are duplicated
-    # update info for duplicated
-    # load the rest to DB
-  print("For now this program does not supported the database updates")
+elif (connected == True and ddl_run == True):
+  if(r.projSurvBool == True):
+    print("project data will be uploaded here")
+  if(r.eligibleBool == True):
+    print("grade data will be uploaded here")
+  else:
+    print("Connected, and database is setup. No data to upload or database already has data")
   canQuery = True
-elif (connected == True and r.userData == False and dbData == True):
-  print("connected, user did not supply data, and the db has data")
-  canQuery = True  
-elif(connected == True and r.userData == False and dbData == False):
+elif(connected == True and r.availSurvBool == False and ddl_run == False):
   print("ERROR: Connected but no data exists in the database, and no data provided to add")
 else:
   print("Not connected")
