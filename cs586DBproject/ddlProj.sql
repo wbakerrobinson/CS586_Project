@@ -1,4 +1,3 @@
--- Table for student information
 CREATE TABLE student(
     student_id integer PRIMARY KEY,
     name varchar(50) NOT NULL,
@@ -6,7 +5,6 @@ CREATE TABLE student(
     CHECK (LENGTH(student_id) == 9)
 );
 
--- Table for student availability
 CREATE TABLE availability(
     availability_id integer PRIMARY KEY,
     day_of_week integer NOT NULL,
@@ -17,14 +15,12 @@ CREATE TABLE availability(
     CHECK (mtg_time >= 0 AND mtg_time <= 17)
 );
 
--- Matches students with valid availability
 CREATE TABLE availability_rel(
     student_id integer REFERENCES student(student_id),
     availability_id integer REFERENCES availability(availability_id),
     PRIMARY KEY(student_id, availability_id)
 );
 
--- Stores comments on student availability
 CREATE TABLE availability_comments(
     student_id integer REFERENCES student(student_id),
     avail_comment text,
@@ -33,7 +29,6 @@ CREATE TABLE availability_comments(
     PRIMARY KEY(student_id)
 );
 
--- Table for project information
 CREATE TABLE project(
     project_id integer PRIMARY KEY,
     organization varchar(50),
@@ -42,7 +37,6 @@ CREATE TABLE project(
     description text
 );
 
--- Table for project rel with student
 CREATE TABLE project_rel(
     project_id integer REFERENCES project(project_id),
     student_id integer REFERENCES student(student_id),
@@ -53,14 +47,12 @@ CREATE TABLE project_rel(
     CHECK (confidence >= 0 AND confidence <= 5)
 );
 
--- Table for grade / student relation
 CREATE TABLE grade_rel(
     student_id integer REFERENCES student(student_id),
     grade_id integer REFERENCES grade(grade_id)
     PRIMARY KEY(student_id, grade_id)
 );
 
--- Table for grades
 CREATE TABLE grade(
     grade_id integer PRIMARY KEY,
     course integer NOT NULL,
@@ -112,4 +104,3 @@ CREATE TABLE skill(
     know_least text NOT NULL,
     languages text NOT NULL
 );
-
