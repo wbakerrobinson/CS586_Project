@@ -53,7 +53,7 @@ except:
     print("ERROR: Unable to connect to database")
     connected = False
 if(connected):
-    conn.autocommit = TRUE
+    conn.autocommit = True
     cur = conn.cursor()
     cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'student';")
     if(cur.fetchone() is None):
@@ -141,7 +141,7 @@ if(eligibleBool == TRUE)
 ```{python function to change pandas df to file like object for Copy to}
 def to_file_obj( dataframe ):
   s_buf = io.StringIO
-  dataframe.to_csv(s_buf)
+  dataframe.to_csv(s_buf, sep = '\t', index = False, na_rep = 'NaN')
   s_buf.seek(0)
   return s_buf;
 ```
@@ -264,10 +264,10 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
     print(error)
   print("DDL run, now time to upload data!")
   # upload availability survey
-  cur.copy_from(to_file_obj(r.student_df), student, sep = ',', null = 'NaN')
-  cur.copy_from(to_file_obj(r.avail_df), availability, sep = ',', null = 'NaN')
-  cur.copy_from(to_file_obj(r.avail_rel_df), availability_rel, sep = ',', null = 'NaN')
-  cur.copy_from(to_file_obj(r.avail_comm_df), availability_comments, sep = ',', null = 'NaN')
+  cur.copy_from(to_file_obj(r.student_df), student, null = 'NaN')
+  cur.copy_from(to_file_obj(r.avail_df), availability, null = 'NaN')
+  cur.copy_from(to_file_obj(r.avail_rel_df), availability_rel, null = 'NaN')
+  cur.copy_from(to_file_obj(r.avail_comm_df), availability_comments, null = 'NaN')
 if (connected == True and ddl_run == True):
   if(r.projSurvBool == True):
     print("project data will be uploaded here")
