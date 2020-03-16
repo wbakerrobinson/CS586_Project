@@ -1,53 +1,17 @@
----
-title: "Capstone Survey Analysis"
-author: "William Baker-Robinson and Kevin Ng"
-date: "3/7/2020"
-output:  
- html_document:
-    theme: lumen
-    toc: yes
-    toc_float:
-      collapsed: yes
-      smooth_scroll: no
-params:
-  availSurv: NA
-  projSurv: NA
-  eligible: NA
-  projInfo: NA
-  host: NA
-  dbName: NA
-  username: NA
-  password: NA
-  rendered_by_shiny: FALSE
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
-
-```{r param vars for python}
-host <- params$host
-dbName <- params$dbName
-username <- params$username
-password <- params$password
-renderVal <- 3
-```
-
-```{python connect to database}
+# CHUNK 1
 import psycopg2
 import pandas
 import io
 
 connected = True
 dbData = False
-student = 0
 
 try:
     conn = psycopg2.connect(
-      dbname = r.dbName,
-      user = r.username,
-      host = r.host,
-      password = r.password
+      dbname = 'win20db2',
+      user = 'win20db2',
+      host = 'dbclass.cs.pdx.edu',
+      password = '426Hillside!'
     )
 except:
     print("ERROR: Unable to connect to database")
@@ -79,74 +43,14 @@ if(connected):
     else:
       data_exists.append(0)
       data_exists.append(0)
-```
-
-```{r check user uploads and clean}
-UpdateProgress(renderVal, params$rendered_by_shiny)
-#check to see if the user uploaded any docs
-userData <- FALSE
-availSurvBool <- FALSE
-projSurvBool <- FALSE
-eligibleBool <- FALSE
-
-if(py$connected == TRUE){
-  print("Connected to the DB this is where I am going to clean")
-  if(py$ddl_run == 0 & !is.null(params$availSurv))
-  {
-    cleanAvailVec <- scheduling(params$availSurv)
-    availSurvBool <- TRUE
-  }
-  if(!is.null(params$availSurv) | py$ddl_run == 1)
-  {
-    if(py$data_exists[1] == 0 & !is.null(params$projSurv) & !is.null(params$projInfo))
-    {
-      cleanProjVec <- projects(params$projSurv, params$projInfo) 
-      projSurvBool <- TRUE
-    }
-    if(py$data_exists[2] == 0 & !is.null(params$eligible))
-    {
-      cleanGradeVec <- grading(params$eligible)
-      eligibleBool <- TRUE
-    }
-  }
-}
-UpdateProgress(renderVal, params$rendered_by_shiny)
-```
-
-```{r clean data frames into R objects}
-if(availSurvBool == TRUE)
-{
-  student_df <- cleanAvailVec[[1]]
-  avail_df <- cleanAvailVec[[2]]
-  avail_rel_df <- cleanAvailVec[[3]]
-  avail_comm_df <- cleanAvailVec[[4]]
-}
-if(projSurvBool == TRUE)
-{
-  interst_df <- cleanProjVec[[1]]
-  skill_df <- cleanProjVec[[2]]
-  work_style_df <- cleanProjVec[[3]]
-  project_rel_df <- cleanProjVec[[4]]
-  role_df <- cleanProjVec[[5]]
-  interested_in_df <- cleanProjVec[[6]]
-  skilled_in_df <- cleanProjVec[[7]]
-}
-if(eligibleBool == TRUE)
-{
-  grade_df <- cleanGradeVec[[1]]
-  grade_rel_df <- cleanGradeVec[[2]]
-}
-```
-
-```{python function to change pandas df to file like object for Copy to}
+      
+# function to change python to file
 def to_file_obj( dataframe ):
   s_buf = io.StringIO()
   dataframe.to_csv(s_buf, index = False, na_rep = 'NaN')
   s_buf.seek(0)
   return s_buf;
-```
 
-```{python update or upload}
 if (connected == True and r.availSurvBool == True and ddl_run == False):
   print("Connected, user supplied data, time to run DDL")
   commands = (
@@ -260,8 +164,8 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   try:
     for command in commands:
       cur.execute(command)
-  except (Exception, psycopg2.DatabaseError) as error:
-    print(error)
+  except:
+    print("Error unable to execute DDL commands")
   print("DDL run, now time to upload data!")
   # upload availability survey
   cur.copy_from(to_file_obj(r.student_df), student, sep = ',', null = 'NaN')
@@ -280,64 +184,6 @@ elif(connected == True and r.availSurvBool == False and ddl_run == False):
 else:
   print("Not connected")
 # Check if you can query the table for the questions below
-```
 
-
-# 20 Questions     
-## Interst Level  
-### Count the number of students interested in each project:  
-_number of students with interest level greater than 5_  
-
-### Count the number of times a project was selected as a top 3 choice:  
-
-### Are there more students who marked low interest in all projects than students who marked high interest in all projects?  
-_How to define low vs. high interest?_  
-
-### Output a list of the 5 students who have the highest interest level for each project:  
-
-### Create a scatterplot of interest level and confidence to complete each project:  
-
-### What skills are students most interested in?  
-
-## Availability  
-### When are most students available?  
-_Create a heatmap_
-
-### Plot students time availability stratified by 1st choice of project:  
-
-### Plot students time availability stratified by 2nd choice of project:  
-
-### Plot students time availability stratified by 3rd choice of project:  
-
-### What proportion of students perfer times before 10:00 Am?
-
-### What proportion of students are available past 6:00 Pm? 
-
-## Skills
-### What are the 5 most common skills?  
-
-### What are the 5 least common skills?  
-
-### What is the most common skill among those who got straight A’s in their prerequisite courses?  
-_Do they have to have an A in all pre-reqs? How many people actually did this?_  
-
-### Return a list of the 5 students who are most confident in their ability to complete each project:  
-
-### Create a histogram of the students confidence level in completing each project:  
-
-### Create a barchart of the skills students are skilled in or familiar with:  
-
-## Eligibility
-### How many students do not meet eligibility criteria?   
-
-### Where do skills not match with eligibility criteria?  
-_May be hard to match skills and classes taken..._  
-
-### What is the average confidence level of students who do not meet eligibility criteria for each project?  
-
-
-```{python}
 if(connected):
   conn.close()
-```
-
