@@ -40,7 +40,7 @@ import io
 
 connected = True
 dbData = False
-student = 0
+ddl_run = 0
 
 try:
     conn = psycopg2.connect(
@@ -53,32 +53,27 @@ except:
     print("ERROR: Unable to connect to database")
     connected = False
 if(connected):
-    conn.autocommit = True
-    cur = conn.cursor()
-    cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'student';")
+  conn.autocommit = True
+  cur = conn.cursor()
+  cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'student';")
+  if(cur.fetchone() is not None):
+    ddl_run = 1
+  data_exists = []
+  has_data = 0
+  # fix with None
+  if(ddl_run == 1):
+    cur.execute("SELECT 1 FROM project;")
     if(cur.fetchone() is None):
-      ddl_run = 0
+      has_data = 0
     else:
-      ddl_run = 1
-    data_exists = []
-    has_data = 0
-    # fix with None
-    if(ddl_run):
-      cur.execute("SELECT 1 FROM project;")
-      if(cur.fetchone() is None):
-        has_data = 0
-      else:
-        has_data = 1
-      data_exists.append(has_data)
-      cur.execute("SELECT 1 FROM grade;")
-      if(cur.fetchone() is None):
-        has_data = 0
-      else:
-        has_data = 1
-      data_exists.append(has_data)
+      has_data = 1
+    data_exists.append(has_data)
+    cur.execute("SELECT 1 FROM grade;")
+    if(cur.fetchone() is None):
+      has_data = 0
     else:
-      data_exists.append(0)
-      data_exists.append(0)
+      has_data = 1
+    data_exists.append(has_data)
 ```
 
 ```{r check user uploads and clean}

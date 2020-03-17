@@ -1,12 +1,12 @@
 # Load R functions and libraries
-source("../grades_f.R")
-source("../projects_f.R")
-source("../scheduling_f.R")
+source("./grades_f.R")
+source("./projects_f.R")
+source("./scheduling_f.R")
 
-availSurv <- read_csv("../data/Survey_1_Response_Data.csv")
-projSurv <- read_csv("../data/Survey_2_Responses_Data.csv")
-projInfo <- read_csv("../data/ProjectData - Sheet1.csv")
-eligible <- read_csv("../data/Example_Capstone_Prerequisite_Data.csv")
+availSurv <- read_csv("./data/Survey_1_Response_Data.csv")
+projSurv <- read_csv("./data/Survey_2_Responses_Data.csv")
+projInfo <- read_csv("./data/ProjectData - Sheet1.csv")
+eligible <- read_csv("./data/Example_Capstone_Prerequisite_Data.csv")
 
 #check to see if the user uploaded any docs
 userData <- FALSE
