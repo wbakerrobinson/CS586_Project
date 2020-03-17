@@ -8,11 +8,12 @@ projSurv <- read_csv("../data/Survey_2_Responses_Data.csv")
 projInfo <- read_csv("../data/ProjectData - Sheet1.csv")
 eligible <- read_csv("../data/Example_Capstone_Prerequisite_Data.csv")
 
+#check to see if the user uploaded any docs
 userData <- FALSE
 availSurvBool <- FALSE
 projSurvBool <- FALSE
 eligibleBool <- FALSE
-connected <-  TRUE
+connected <- TRUE
 
 if(connected == TRUE){
   print("Connected to the DB this is where I am going to clean")
@@ -35,7 +36,6 @@ if(connected == TRUE){
     }
   }
 }
-
 if(availSurvBool == TRUE)
 {
   student_df <- cleanAvailVec[[1]]
@@ -52,9 +52,11 @@ if(projSurvBool == TRUE)
   role_df <- cleanProjVec[[5]]
   interested_in_df <- cleanProjVec[[6]]
   skilled_in_df <- cleanProjVec[[7]]
+  project_df <- cleanProjVec[[8]]
 }
 if(eligibleBool == TRUE)
 {
   grade_df <- cleanGradeVec[[1]]
   grade_rel_df <- cleanGradeVec[[2]]
 }
+

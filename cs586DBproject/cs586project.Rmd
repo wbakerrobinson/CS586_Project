@@ -158,15 +158,15 @@ if(r.availSurvBool == True):
   avail_comm_df = r.avail_comm_df.astype({'student_id':'int'})
 if(r.projSurvBool == True):
   interest_df = r.interst_df.astype({'student_id':'int'})
-  skill_df = r.skill_df({'student_id':'int'})
-  work_style_df = r.work_style_df({'student_id':'int'})
+  skill_df = r.skill_df.astype({'student_id':'int'})
+  work_style_df = r.work_style_df.astype({'student_id':'int'})
   project_rel_df = r.project_rel_df.astype({'project_id':'int', 'student_id':'int', 'interest':'int', 'confidence':'int'})
   role_df = r.role_df.astype({'student_id':'int', 'role_id':'int'})
   interested_in_df = r.interested_in_df.astype({'student_id':'int'})
   skilled_in_df = r.skilled_in_df.astype({'student_id':'int'})
   project = r.project_df.astype({'project_id':'int'})
 if(r.eligibleBool == True):
-  grade_df = r.grade_df({'student_id':'int'})
+  grade_df = r.grade_df.astype({'grade_id':'int'})
   grade_rel_df = r.grade_rel_df.astype({'student_id':'int', 'grade_id':'int'})
 ```
 
@@ -180,7 +180,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   email varchar(50) UNIQUE NOT NULL
   );
   """,
-  """ CREATE TABLE availability(
+  """ CREATE TABLE availability (
   availability_id integer PRIMARY KEY,
   day_of_week integer NOT NULL,
   mtg_time integer NOT NULL,
@@ -190,13 +190,13 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   CHECK (mtg_time >= 0 AND mtg_time <= 17)
   );
   """,
-  """ CREATE TABLE availability_rel(
+  """ CREATE TABLE availability_rel (
   student_id integer REFERENCES student(student_id),
   availability_id integer REFERENCES availability(availability_id),
   PRIMARY KEY(student_id, availability_id)
   );
   """,
-  """ CREATE TABLE availability_comments(
+  """ CREATE TABLE availability_comments (
   student_id integer REFERENCES student(student_id),
   avail_comment text,
   unavailability text,
@@ -204,7 +204,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   PRIMARY KEY(student_id)
   );
   """,
-  """ CREATE TABLE project(
+  """ CREATE TABLE project (
   project_id integer PRIMARY KEY,
   organization varchar(50),
   contact_name text,
@@ -212,7 +212,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   description text
   );
   """,
-  """ CREATE TABLE project_rel(
+  """ CREATE TABLE project_rel (
   project_id integer REFERENCES project(project_id),
   student_id integer REFERENCES student(student_id),
   interest integer NOT NULL,
@@ -222,13 +222,13 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   CHECK (confidence >= 0 AND confidence <= 5)
   );
   """,
-  """ CREATE TABLE grade_rel(
+  """ CREATE TABLE grade_rel (
   student_id integer REFERENCES student(student_id),
   grade_id integer REFERENCES grade(grade_id)
   PRIMARY KEY(student_id, grade_id)
   );
   """,
-  """ CREATE TABLE grade(
+  """ CREATE TABLE grade (
   grade_id integer PRIMARY KEY,
   course integer NOT NULL,
   grade_value integer NOT NULL,
@@ -236,28 +236,28 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   CHECK (grade_value >= 0 AND grade_value <= 21)
   );
   """,
-  """ CREATE TABLE interested_in(
+  """ CREATE TABLE interested_in (
   student_id integer REFERENCES student(student_id),
   interested_id integer NOT NULL,
   comment text,
   CHECK (interested_id >= 0 AND interested_id <= 7)
   );
   """,
-  """ CREATE TABLE skilled_in(
+  """ CREATE TABLE skilled_in (
   student_id integer REFERENCES student(student_id),
   familiar_id integer NOT NULL,
   comment text,
   CHECK (familiar_id >= 0 AND familiar_id <= 7)
   );
   """,
-  """ CREATE TABLE role(
+  """ CREATE TABLE role (
   student_id integer REFERENCES student(student_id),
   role_id integer NOT NULL,
   comment text,
   CHECK (role_id >= 0 AND role_id <= 4)
   );
   """,
-  """ CREATE TABLE work_info(
+  """ CREATE TABLE work_info (
   student_id integer REFERENCES student(student_id),
   strength text NOT NULL,
   weakness text NOT NULL,
@@ -266,14 +266,14 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   other text 
   );
   """,
-  """ CREATE TABLE interest(
+  """ CREATE TABLE interest (
   student_id integer REFERENCES student(student_id),
   interest_most text NOT NULL,
   interest_least text NOT NULL,
   cs_enjoy text NOT NULL
   );
   """,
-  """ CREATE TABLE skill(
+  """ CREATE TABLE skill (
   student_id integer REFERENCES student(student_id),
   know_most text NOT NULL,
   know_least text NOT NULL,
@@ -291,7 +291,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = ',', null = '')
   cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = ',', null = '')
 if (connected == True and ddl_run == True):
-  if(r.projSurvBool == True)
+  if(r.projSurvBool == True):
     print("project data will be uploaded here")
     cur.copy_from(to_file_obj(interest_df), 'interest', sep = ',', null = '')
     cur.copy_from(to_file_obj(skill_df), 'skill', sep = ',', null = '')
@@ -368,20 +368,21 @@ _May be hard to match skills and classes taken..._
 
 
 ```{python}
-cur.execute("DROP TABLE student;")
-cur.execute("DROP TABLE availability;")
-cur.execute("DROP TABLE availability_rel;")
-cur.execute("DROP TABLE availability_comments;")
-cur.execute("DROP TABLE interest;")
-cur.execute("DROP TABLE skill;")
-cur.execute("DROP TABLE work_style;")
-cur.execute("DROP TABLE project_rel;")
-cur.execute("DROP TABLE project;")
-cur.execute("DROP TABLE role;")
-cur.execute("DROP TABLE interested_in;")
-cur.execute("DROP TABLE skilled_in;")
-cur.execute("DROP TABLE grade;")
-cur.execute("DROP TABLE grade_rel;")
+if (connected == True and r.availSurvBool == True and ddl_run == False):
+  cur.execute("DROP TABLE student;")
+  cur.execute("DROP TABLE availability;")
+  cur.execute("DROP TABLE availability_rel;")
+  cur.execute("DROP TABLE availability_comments;")
+  cur.execute("DROP TABLE interest;")
+  cur.execute("DROP TABLE skill;")
+  cur.execute("DROP TABLE work_style;")
+  cur.execute("DROP TABLE project_rel;")
+  cur.execute("DROP TABLE project;")
+  cur.execute("DROP TABLE role;")
+  cur.execute("DROP TABLE interested_in;")
+  cur.execute("DROP TABLE skilled_in;")
+  cur.execute("DROP TABLE grade;")
+  cur.execute("DROP TABLE grade_rel;")
 if(connected):
   conn.close()
 ```

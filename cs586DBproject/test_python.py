@@ -1,4 +1,3 @@
-# CHUNK 1
 import psycopg2
 import pandas
 import io
@@ -8,10 +7,10 @@ dbData = False
 
 try:
     conn = psycopg2.connect(
-      dbname = 'win20db2',
-      user = 'win20db2',
-      host = 'dbclass.cs.pdx.edu',
-      password = '426Hillside!'
+      dbname = r.dbName,
+      user = r.username,
+      host = r.host,
+      password = r.password
     )
 except:
     print("ERROR: Unable to connect to database")
@@ -44,13 +43,12 @@ if(connected):
       data_exists.append(0)
       data_exists.append(0)
       
-# function to change python to file
 def to_file_obj( dataframe ):
   s_buf = io.StringIO()
   dataframe.to_csv(s_buf, index = False, header = False)
   s_buf.seek(0)
   return s_buf;
-
+  
 if(r.availSurvBool == True):
   student_df = r.student_df.astype({'student_id':'int'})
   avail_df = r.avail_df.astype({'availability_id':'int'})
@@ -58,14 +56,15 @@ if(r.availSurvBool == True):
   avail_comm_df = r.avail_comm_df.astype({'student_id':'int'})
 if(r.projSurvBool == True):
   interest_df = r.interst_df.astype({'student_id':'int'})
-  skill_df = r.skill_df({'student_id':'int'})
-  work_style_df = r.work_style_df({'student_id':'int'})
+  skill_df = r.skill_df.astype({'student_id':'int'})
+  work_style_df = r.work_style_df.astype({'student_id':'int'})
   project_rel_df = r.project_rel_df.astype({'project_id':'int', 'student_id':'int', 'interest':'int', 'confidence':'int'})
   role_df = r.role_df.astype({'student_id':'int', 'role_id':'int'})
   interested_in_df = r.interested_in_df.astype({'student_id':'int'})
   skilled_in_df = r.skilled_in_df.astype({'student_id':'int'})
+  project = r.project_df.astype({'project_id':'int'})
 if(r.eligibleBool == True):
-  grade_df = r.grade_df({'student_id':'int'})
+  grade_df = r.grade_df.astype({'grade_id':'int'})
   grade_rel_df = r.grade_rel_df.astype({'student_id':'int', 'grade_id':'int'})
 
 if (connected == True and r.availSurvBool == True and ddl_run == False):
@@ -147,7 +146,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   CHECK (familiar_id >= 0 AND familiar_id <= 7)
   );
   """,
-  """ CREATE TABLE roll(
+  """ CREATE TABLE role(
   student_id integer REFERENCES student(student_id),
   role_id integer NOT NULL,
   comment text,
@@ -181,18 +180,27 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
     for command in commands:
       cur.execute(command)
   except:
-    print("Error unable to execute DDL commands")
-  print("DDL run, now time to upload data!")
+    print("ERROR: Not able to run DDL")
   # upload availability survey
-  cur.copy_from(to_file_obj(student_df), 'student', sep = ',')
-  cur.copy_from(to_file_obj(avail_df), 'availability', sep = ',')
-  cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = ',')
-  cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = ',')
+  cur.copy_from(to_file_obj(student_df), 'student', sep = ',', null = '')
+  cur.copy_from(to_file_obj(avail_df), 'availability', sep = ',', null = '')
+  cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = ',', null = '')
+  cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = ',', null = '')
 if (connected == True and ddl_run == True):
   if(r.projSurvBool == True):
     print("project data will be uploaded here")
+    cur.copy_from(to_file_obj(interest_df), 'interest', sep = ',', null = '')
+    cur.copy_from(to_file_obj(skill_df), 'skill', sep = ',', null = '')
+    cur.copy_from(to_file_obj(work_style_df), 'work_style', sep = ',', null = '')
+    cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = ',', null = '')
+    cur.copy_from(to_file_obj(project_df), 'project', sep = ',', null = '')
+    cur.copy_from(to_file_obj(role_df), 'role', sep = ',', null = '')
+    cur.copy_from(to_file_obj(interested_in_df), 'interested_in', sep = ',', null = '')
+    cur.copy_from(to_file_obj(skilled_in_df), 'skilled_in', sep = ',', null = '')
   if(r.eligibleBool == True):
     print("grade data will be uploaded here")
+    cur.copy_from(to_file_obj(grade_df), 'grade', sep = ',', null = '')
+    cur.copy_from(to_file_obj(grade_rel_df), 'grade_rel', sep = ',', null = '')
   else:
     print("Connected, and database is setup. No data to upload or database already has data")
 elif(connected == True and r.availSurvBool == False and ddl_run == False):
@@ -201,5 +209,21 @@ else:
   print("Not connected")
 # Check if you can query the table for the questions below
 
+if (connected == True and r.availSurvBool == True and ddl_run == False):
+  cur.execute("DROP TABLE student;")
+  cur.execute("DROP TABLE availability;")
+  cur.execute("DROP TABLE availability_rel;")
+  cur.execute("DROP TABLE availability_comments;")
+  cur.execute("DROP TABLE interest;")
+  cur.execute("DROP TABLE skill CASCADE;")
+  cur.execute("DROP TABLE work_style;")
+  cur.execute("DROP TABLE project_rel;")
+  cur.execute("DROP TABLE project;")
+  cur.execute("DROP TABLE role;")
+  cur.execute("DROP TABLE interested_in;")
+  cur.execute("DROP TABLE skilled_in;")
+  cur.execute("DROP TABLE grade;")
+  cur.execute("DROP TABLE grade_rel;")
 if(connected):
   conn.close()
+  
