@@ -1,8 +1,7 @@
 CREATE TABLE student(
     student_id integer PRIMARY KEY,
     name varchar(50) NOT NULL,
-    email varchar(50) UNIQUE NOT NULL,
-    CHECK (LENGTH(student_id) == 9)
+    email varchar(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE availability(
@@ -10,7 +9,6 @@ CREATE TABLE availability(
     day_of_week integer NOT NULL,
     mtg_time integer NOT NULL,
     description integer NOT NULL,
-    CHECK (description == 1 OR description == 0),
     CHECK (day_of_week >= 0 AND day_of_week <= 6),
     CHECK (mtg_time >= 0 AND mtg_time <= 17)
 );
@@ -49,7 +47,7 @@ CREATE TABLE project_rel(
 
 CREATE TABLE grade_rel(
     student_id integer REFERENCES student(student_id),
-    grade_id integer REFERENCES grade(grade_id)
+    grade_id integer REFERENCES grade(grade_id),
     PRIMARY KEY(student_id, grade_id)
 );
 

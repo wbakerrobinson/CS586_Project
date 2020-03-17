@@ -81,7 +81,6 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   day_of_week integer NOT NULL,
   mtg_time integer NOT NULL,
   description integer NOT NULL,
-  CHECK (description == 1 OR description == 0),
   CHECK (day_of_week >= 0 AND day_of_week <= 6),
   CHECK (mtg_time >= 0 AND mtg_time <= 17)
   );
@@ -89,7 +88,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   """ CREATE TABLE availability_rel(
   student_id integer REFERENCES student(student_id),
   availability_id integer REFERENCES availability(availability_id),
-  PRIMARY KEY(student_id, availability_id)
+  PRIMARY KEY (student_id, availability_id)
   );
   """,
   """ CREATE TABLE availability_comments(
@@ -118,18 +117,18 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   CHECK (confidence >= 0 AND confidence <= 5)
   );
   """,
-  """ CREATE TABLE grade_rel(
-  student_id integer REFERENCES student(student_id),
-  grade_id integer REFERENCES grade(grade_id)
-  PRIMARY KEY(student_id, grade_id)
-  );
-  """,
   """ CREATE TABLE grade(
   grade_id integer PRIMARY KEY,
   course integer NOT NULL,
   grade_value integer NOT NULL,
   CHECK (course >= 0 AND course <= 11),
   CHECK (grade_value >= 0 AND grade_value <= 21)
+  );
+  """,
+  """ CREATE TABLE grade_rel(
+  student_id integer REFERENCES student(student_id),
+  grade_id integer REFERENCES grade(grade_id),
+  PRIMARY KEY (student_id, grade_id)
   );
   """,
   """ CREATE TABLE interested_in(
@@ -153,7 +152,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   CHECK (role_id >= 0 AND role_id <= 4)
   );
   """,
-  """ CREATE TABLE work_info(
+  """ CREATE TABLE work_style(
   student_id integer REFERENCES student(student_id),
   strength text NOT NULL,
   weakness text NOT NULL,
@@ -177,10 +176,11 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   );
   """)
   try:
-    for command in commands:
-      cur.execute(command)
+      for command in commands:
+        cur.execute(command)
   except:
-    print("ERROR: Not able to run DDL")
+      print("ERROR Not able to run DDL")
+  
   # upload availability survey
   cur.copy_from(to_file_obj(student_df), 'student', sep = ',', null = '')
   cur.copy_from(to_file_obj(avail_df), 'availability', sep = ',', null = '')
@@ -210,8 +210,6 @@ else:
 # Check if you can query the table for the questions below
 
 if (connected == True and r.availSurvBool == True and ddl_run == False):
-  cur.execute("DROP TABLE student;")
-  cur.execute("DROP TABLE availability;")
   cur.execute("DROP TABLE availability_rel;")
   cur.execute("DROP TABLE availability_comments;")
   cur.execute("DROP TABLE interest;")
@@ -222,8 +220,10 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   cur.execute("DROP TABLE role;")
   cur.execute("DROP TABLE interested_in;")
   cur.execute("DROP TABLE skilled_in;")
-  cur.execute("DROP TABLE grade;")
   cur.execute("DROP TABLE grade_rel;")
+  cur.execute("DROP TABLE grade;")
+  cur.execute("DROP TABLE availability cascade;")
+  cur.execute("DROP TABLE student cascade;")
 if(connected):
   conn.close()
   
