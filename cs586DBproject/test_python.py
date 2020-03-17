@@ -4,6 +4,7 @@ import io
 
 connected = True
 dbData = False
+ddl_run = 0
 
 try:
     conn = psycopg2.connect(
@@ -16,32 +17,27 @@ except:
     print("ERROR: Unable to connect to database")
     connected = False
 if(connected):
-    conn.autocommit = True
-    cur = conn.cursor()
-    cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'student';")
+  conn.autocommit = True
+  cur = conn.cursor()
+  cur.execute("SELECT 1 FROM information_schema.tables WHERE table_name = 'student';")
+  if(cur.fetchone() is not None):
+    ddl_run = 1
+  data_exists = []
+  has_data = 0
+  # fix with None
+  if(ddl_run == 1):
+    cur.execute("SELECT 1 FROM project;")
     if(cur.fetchone() is None):
-      ddl_run = 0
+      has_data = 0
     else:
-      ddl_run = 1
-    data_exists = []
-    has_data = 0
-    # fix with None
-    if(ddl_run):
-      cur.execute("SELECT 1 FROM project;")
-      if(cur.fetchone() is None):
-        has_data = 0
-      else:
-        has_data = 1
-      data_exists.append(has_data)
-      cur.execute("SELECT 1 FROM grade;")
-      if(cur.fetchone() is None):
-        has_data = 0
-      else:
-        has_data = 1
-      data_exists.append(has_data)
+      has_data = 1
+    data_exists.append(has_data)
+    cur.execute("SELECT 1 FROM grade;")
+    if(cur.fetchone() is None):
+      has_data = 0
     else:
-      data_exists.append(0)
-      data_exists.append(0)
+      has_data = 1
+    data_exists.append(has_data)
       
 def to_file_obj( dataframe ):
   s_buf = io.StringIO()
@@ -67,7 +63,7 @@ if(r.eligibleBool == True):
   grade_df = r.grade_df.astype({'grade_id':'int'})
   grade_rel_df = r.grade_rel_df.astype({'student_id':'int', 'grade_id':'int'})
 
-if (connected == True and r.availSurvBool == True and ddl_run == False):
+if (connected == True and r.availSurvBool == True and ddl_run == 0):
   print("Connected, user supplied data, time to run DDL")
   commands = (
   """  CREATE TABLE student (
@@ -186,7 +182,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   cur.copy_from(to_file_obj(avail_df), 'availability', sep = ',', null = '')
   cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = ',', null = '')
   cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = ',', null = '')
-if (connected == True and ddl_run == True):
+if (connected == True and ddl_run == 1):
   if(r.projSurvBool == True):
     print("project data will be uploaded here")
     cur.copy_from(to_file_obj(interest_df), 'interest', sep = ',', null = '')
@@ -203,13 +199,13 @@ if (connected == True and ddl_run == True):
     cur.copy_from(to_file_obj(grade_rel_df), 'grade_rel', sep = ',', null = '')
   else:
     print("Connected, and database is setup. No data to upload or database already has data")
-elif(connected == True and r.availSurvBool == False and ddl_run == False):
+elif(connected == True and r.availSurvBool == False and ddl_run == 0):
   print("ERROR: Connected but no data exists in the database, and no data provided to add")
 else:
   print("Not connected")
 # Check if you can query the table for the questions below
 
-if (connected == True and r.availSurvBool == True and ddl_run == False):
+if (connected == True and r.availSurvBool == True and ddl_run == 0):
   cur.execute("DROP TABLE availability_rel;")
   cur.execute("DROP TABLE availability_comments;")
   cur.execute("DROP TABLE interest;")
