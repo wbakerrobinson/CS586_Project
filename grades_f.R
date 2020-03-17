@@ -135,30 +135,29 @@ grading <- function(prerequisites){
   # Populating the rel table
   
   for(i in 1:nrow(grades_long)){
-    if(!is.na(str_detect(grades_long$grade[i], ",")) &
-       str_detect(grades_long$grade[i], ",")){
-      multiple <- unlist(strsplit(grades_long$grade[i], split = ",", fixed = T))
-      multiple <- sapply(multiple, trimws)
-      for(j in 1:length(multiple)){
+    if(!is.na(str_detect(grades_long$grade[i], ","))){
+      if(str_detect(grades_long$grade[i], ",")){
+        multiple <- unlist(strsplit(grades_long$grade[i], split = ",", fixed = T))
+        multiple <- sapply(multiple, trimws)
+        for(j in 1:length(multiple)){
+          course_name <- unlist(grades_long[i, "class"])
+          matches_c <- which(as.character(grade$course) == course_name)
+          matches_g <- which(as.character(grade$grade_value) == multiple[j])
+          grade_rel <- add_case(grade_rel, 
+                                student_id = grades_long$student_id[i],
+                                grade_id = unlist(grade[matches_g[matches_g %in% 
+                                                                    matches_c], "grade_id"]))
+        }
+      }else{
         course_name <- unlist(grades_long[i, "class"])
         matches_c <- which(as.character(grade$course) == course_name)
-        grade_name <- unlist(grades_long[i, "grade"])
-        matches_g <- which(as.character(grade$grade_value) == multiple[j])
+        matches_g <- which(as.character(grade$grade_value) == unlist(grades_long[i, "grade"]))
         grade_rel <- add_case(grade_rel, 
-                               student_id = grades_long$student_id[i],
-                               grade_id = unlist(grade[matches_g[matches_g %in% 
-                                                                     matches_c], "grade_id"]))
+                              student_id = grades_long$student_id[i],
+                              grade_id = unlist(grade[matches_g[matches_g %in% 
+                                                                  matches_c], "grade_id"]))
+                                                                  
       }
-    }else if(!is.na(str_detect(grades_long$grade[i], ",")) &
-             str_detect(grades_long$grade[i], ",") == F){
-      course_name <- unlist(grades_long[i, "class"])
-      matches_c <- which(as.character(grade$course) == course_name)
-      grade_name <- unlist(grades_long[i, "grade"])
-      matches_g <- which(as.character(grade$grade_value) == grade_name)
-      grade_rel <- add_case(grade_rel, 
-                             student_id = grades_long$student_id[i],
-                             grade_id = unlist(grade[matches_g[matches_g %in% 
-                                                                   matches_c], "grade_id"]))
     }
   }
   return(list(grade, grade_rel))
