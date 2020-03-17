@@ -82,7 +82,7 @@ if(connected):
 ```
 
 ```{r check user uploads and clean}
-UpdateProgress(renderVal, params$rendered_by_shiny)
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 #check to see if the user uploaded any docs
 userData <- FALSE
 availSurvBool <- FALSE
@@ -94,7 +94,7 @@ if(py$connected == TRUE){
   if(py$ddl_run == 0 & !is.null(params$availSurv))
   {
     cleanAvailVec <- scheduling(params$availSurv)
-    UpdateProgress(renderVal, params$rendered_by_shiny) # update shiny rendering bar
+    renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny) # update shiny rendering bar
     availSurvBool <- TRUE
   }
   if(!is.null(params$availSurv) | py$ddl_run == 1)
@@ -102,13 +102,13 @@ if(py$connected == TRUE){
     if(py$data_exists[1] == 0 & !is.null(params$projSurv) & !is.null(params$projInfo))
     {
       cleanProjVec <- projects(params$projSurv, params$projInfo) 
-      UpdateProgress(renderVal, params$rendered_by_shiny) # update shiny rendering bar
+      renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny) # update shiny rendering bar
       projSurvBool <- TRUE
     }
     if(py$data_exists[2] == 0 & !is.null(params$eligible))
     {
       cleanGradeVec <- grading(params$eligible)
-      UpdateProgress(renderVal, params$rendered_by_shiny) # update shiny rendering bar
+      renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny) # update shiny rendering bar
       eligibleBool <- TRUE
     }
   }
@@ -139,7 +139,7 @@ if(eligibleBool == TRUE)
   grade_df <- cleanGradeVec[[1]]
   grade_rel_df <- cleanGradeVec[[2]]
 }
-UpdateProgress(renderVal, params$rendered_by_shiny) # update shiny rendering bar
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny) # update shiny rendering bar
 ```
 
 ```{python function to change pandas df to file like object for Copy to}
