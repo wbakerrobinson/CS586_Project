@@ -313,7 +313,8 @@ scheduling <- function(survey_1){
 
   student <- data.frame(student_id = scheduling_raw$student_id,
                       email = scheduling_raw$email,
-                      name = scheduling_raw$name)
+                      name = scheduling_raw$name,
+                      stringsAsFactors = F)
 
   availability_comments <- data.frame(student_id = vector("numeric"),
                                     comment = vector("character"),

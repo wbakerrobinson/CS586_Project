@@ -43,12 +43,12 @@ projects <- function(survey_2, project_desc){
                           stringsAsFactors = F)
 
   for(i in 1:nrow(projects_raw)){
-    for(j in 1:8){
+    for(j in project_desc$Project_id){
       c1 <- which(names(projects_raw) == paste0("p", j, "_interest"))
       c2 <- which(names(projects_raw) == paste0("p", j, "_confidence"))
       c3 <- which(names(projects_raw) == paste0("p", j, "_comments"))
       project_rel <- add_case(project_rel,
-                            student_id = projects_raw[i, "student_id"],
+                            student_id = unlist(projects_raw[i, "student_id"]),
                             project_id = j,
                             interest = unlist(projects_raw[i, c1]),
                             confidence = unlist(projects_raw[i, c2]),
