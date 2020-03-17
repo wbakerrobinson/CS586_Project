@@ -134,6 +134,11 @@ grading <- function(prerequisites){
                                   grade_id = vector("numeric")))
   # Populating the rel table
   
+  # Note that if the same class was taken more than once,
+  # and the same letter grade was acquired each time, that additional
+  # information won't be represented. Ordering information
+  # for the grades is also unrepresented
+  
   for(i in 1:nrow(grades_long)){
     if(!is.na(str_detect(grades_long$grade[i], ","))){
       if(str_detect(grades_long$grade[i], ",")){
@@ -160,5 +165,6 @@ grading <- function(prerequisites){
       }
     }
   }
+  grade_rel <- distinct(grade_rel)
   return(list(grade, grade_rel))
 }
