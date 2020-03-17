@@ -9,7 +9,6 @@ projInfo <- read_csv("./data/ProjectData - Sheet1.csv")
 eligible <- read_csv("./data/Example_Capstone_Prerequisite_Data.csv")
 
 #check to see if the user uploaded any docs
-userData <- FALSE
 availSurvBool <- FALSE
 projSurvBool <- FALSE
 eligibleBool <- FALSE

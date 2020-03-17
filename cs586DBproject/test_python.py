@@ -38,10 +38,13 @@ if(connected):
     else:
       has_data = 1
     data_exists.append(has_data)
+  else:
+    data_exists.append(0)
+    data_exists.append(0)
       
 def to_file_obj( dataframe ):
   s_buf = io.StringIO()
-  dataframe.to_csv(s_buf, index = False, header = False)
+  dataframe.to_csv(s_buf, index = False, header = False, na_rep = 'NULL', sep = '\t')
   s_buf.seek(0)
   return s_buf;
   
@@ -54,11 +57,11 @@ if(r.projSurvBool == True):
   interest_df = r.interst_df.astype({'student_id':'int'})
   skill_df = r.skill_df.astype({'student_id':'int'})
   work_style_df = r.work_style_df.astype({'student_id':'int'})
+  project_df = r.project_df.astype({'project_id':'int'})
   project_rel_df = r.project_rel_df.astype({'project_id':'int', 'student_id':'int', 'interest':'int', 'confidence':'int'})
   role_df = r.role_df.astype({'student_id':'int', 'role_id':'int'})
   interested_in_df = r.interested_in_df.astype({'student_id':'int'})
   skilled_in_df = r.skilled_in_df.astype({'student_id':'int'})
-  project = r.project_df.astype({'project_id':'int'})
 if(r.eligibleBool == True):
   grade_df = r.grade_df.astype({'grade_id':'int'})
   grade_rel_df = r.grade_rel_df.astype({'student_id':'int', 'grade_id':'int'})
@@ -74,11 +77,9 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   """,
   """ CREATE TABLE availability(
   availability_id integer PRIMARY KEY,
-  day_of_week integer NOT NULL,
-  mtg_time integer NOT NULL,
-  description integer NOT NULL,
-  CHECK (day_of_week >= 0 AND day_of_week <= 6),
-  CHECK (mtg_time >= 0 AND mtg_time <= 17)
+  day_of_week varchar(10) NOT NULL,
+  mtg_time varchar(10) NOT NULL,
+  description varchar(10) NOT NULL
   );
   """,
   """ CREATE TABLE availability_rel(
@@ -97,9 +98,10 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   """,
   """ CREATE TABLE project(
   project_id integer PRIMARY KEY,
-  organization varchar(50),
+  organization varchar(150),
   contact_name text,
   contact_email text,
+  project_name text,
   description text
   );
   """,
@@ -115,10 +117,8 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   """,
   """ CREATE TABLE grade(
   grade_id integer PRIMARY KEY,
-  course integer NOT NULL,
-  grade_value integer NOT NULL,
-  CHECK (course >= 0 AND course <= 11),
-  CHECK (grade_value >= 0 AND grade_value <= 21)
+  course varchar(6) NOT NULL,
+  grade_value varchar(4) NOT NULL
   );
   """,
   """ CREATE TABLE grade_rel(
@@ -130,15 +130,13 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   """ CREATE TABLE interested_in(
   student_id integer REFERENCES student(student_id),
   interested_id integer NOT NULL,
-  comment text,
-  CHECK (interested_id >= 0 AND interested_id <= 7)
+  comment text
   );
   """,
   """ CREATE TABLE skilled_in(
   student_id integer REFERENCES student(student_id),
   familiar_id integer NOT NULL,
-  comment text,
-  CHECK (familiar_id >= 0 AND familiar_id <= 7)
+  comment text
   );
   """,
   """ CREATE TABLE role(
@@ -152,7 +150,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   student_id integer REFERENCES student(student_id),
   strength text NOT NULL,
   weakness text NOT NULL,
-  work integer NOT NULL,
+  work varchar(18) NOT NULL,
   know_about text,
   other text 
   );
@@ -178,25 +176,25 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
       print("ERROR Not able to run DDL")
   
   # upload availability survey
-  cur.copy_from(to_file_obj(student_df), 'student', sep = ',', null = '')
-  cur.copy_from(to_file_obj(avail_df), 'availability', sep = ',', null = '')
-  cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = ',', null = '')
-  cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = ',', null = '')
+  cur.copy_from(to_file_obj(student_df), 'student', sep = '\t', null = 'NULL')
+  cur.copy_from(to_file_obj(avail_df), 'availability', sep = '\t', null = 'NULL')
+  cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = '\t', null = 'NULL')
+  cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = '\t', null = 'NULL')
 if (connected == True and ddl_run == 1):
   if(r.projSurvBool == True):
     print("project data will be uploaded here")
-    cur.copy_from(to_file_obj(interest_df), 'interest', sep = ',', null = '')
-    cur.copy_from(to_file_obj(skill_df), 'skill', sep = ',', null = '')
-    cur.copy_from(to_file_obj(work_style_df), 'work_style', sep = ',', null = '')
-    cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = ',', null = '')
-    cur.copy_from(to_file_obj(project_df), 'project', sep = ',', null = '')
-    cur.copy_from(to_file_obj(role_df), 'role', sep = ',', null = '')
-    cur.copy_from(to_file_obj(interested_in_df), 'interested_in', sep = ',', null = '')
-    cur.copy_from(to_file_obj(skilled_in_df), 'skilled_in', sep = ',', null = '')
+    cur.copy_from(to_file_obj(interest_df), 'interest', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(skill_df), 'skill', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(work_style_df), 'work_style', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(project_df), 'project', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(role_df), 'role', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(interested_in_df), 'interested_in', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(skilled_in_df), 'skilled_in', sep = '\t', null = 'NULL')
   if(r.eligibleBool == True):
     print("grade data will be uploaded here")
-    cur.copy_from(to_file_obj(grade_df), 'grade', sep = ',', null = '')
-    cur.copy_from(to_file_obj(grade_rel_df), 'grade_rel', sep = ',', null = '')
+    cur.copy_from(to_file_obj(grade_df), 'grade', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(grade_rel_df), 'grade_rel', sep = '\t', null = 'NULL')
   else:
     print("Connected, and database is setup. No data to upload or database already has data")
 elif(connected == True and r.availSurvBool == False and ddl_run == 0):
