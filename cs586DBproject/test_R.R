@@ -6,7 +6,7 @@ source("./scheduling_f.R")
 availSurv <- read_csv("./data/Survey_1_Response_Data.csv")
 projSurv <- read_csv("./data/Survey_2_Responses_Data.csv")
 projInfo <- read_csv("./data/ProjectData - Sheet1.csv")
-eligible <- read_csv("./data/Example_Capstone_Prerequisite_Data.csv")
+eligible <- read_csv("./data/Example_Capstone_Prerequisite_Data_37.csv")
 
 #check to see if the user uploaded any docs
 availSurvBool <- FALSE
