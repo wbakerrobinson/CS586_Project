@@ -180,14 +180,15 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   cur.copy_from(to_file_obj(avail_df), 'availability', sep = '\t', null = 'NULL')
   cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = '\t', null = 'NULL')
   cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = '\t', null = 'NULL')
+  ddl_run = 1
 if (connected == True and ddl_run == 1):
   if(r.projSurvBool == True):
     print("project data will be uploaded here")
     cur.copy_from(to_file_obj(interest_df), 'interest', sep = '\t', null = 'NULL')
     cur.copy_from(to_file_obj(skill_df), 'skill', sep = '\t', null = 'NULL')
     cur.copy_from(to_file_obj(work_style_df), 'work_style', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = '\t', null = 'NULL')
     cur.copy_from(to_file_obj(project_df), 'project', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = '\t', null = 'NULL')
     cur.copy_from(to_file_obj(role_df), 'role', sep = '\t', null = 'NULL')
     cur.copy_from(to_file_obj(interested_in_df), 'interested_in', sep = '\t', null = 'NULL')
     cur.copy_from(to_file_obj(skilled_in_df), 'skilled_in', sep = '\t', null = 'NULL')
@@ -202,7 +203,6 @@ elif(connected == True and r.availSurvBool == False and ddl_run == 0):
 else:
   print("Not connected")
 # Check if you can query the table for the questions below
-
 if (connected == True and r.availSurvBool == True and ddl_run == 0):
   cur.execute("DROP TABLE availability_rel;")
   cur.execute("DROP TABLE availability_comments;")
@@ -220,4 +220,3 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   cur.execute("DROP TABLE student cascade;")
 if(connected):
   conn.close()
-  

@@ -283,6 +283,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   cur.copy_from(to_file_obj(avail_df), 'availability', sep = '\t', null = 'NULL')
   cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = '\t', null = 'NULL')
   cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = '\t', null = 'NULL')
+  ddl_run = True
 if (connected == True and ddl_run == True):
   if(r.projSurvBool == True):
     print("project data will be uploaded here")
@@ -361,10 +362,12 @@ _May be hard to match skills and classes taken..._
 
 
 ```{python}
-if (connected == True and r.availSurvBool == True and ddl_run == False):
+# This is for testing
+print("""if (connected == True and r.availSurvBool == True and ddl_run == False):
   cur.execute("DROP TABLE availability_rel;")
   cur.execute("DROP TABLE availability_comments;")
   cur.execute("DROP TABLE interest;")
+  cur.execute("DROP TABLE skill CASCADE;")
   cur.execute("DROP TABLE work_style;")
   cur.execute("DROP TABLE project_rel;")
   cur.execute("DROP TABLE project;")
@@ -372,11 +375,11 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   cur.execute("DROP TABLE interested_in;")
   cur.execute("DROP TABLE skilled_in;")
   cur.execute("DROP TABLE grade_rel;")
-  cur.execute("DROP TABLE grade CASCADE;")
-  cur.execute("DROP TABLE skill CASCADE;")
-  cur.execute("DROP TABLE availability CASCADE;")
-  cur.execute("DROP TABLE student CASCADE;")
+  cur.execute("DROP TABLE grade;")
+  cur.execute("DROP TABLE availability cascade;")
+  cur.execute("DROP TABLE student cascade;")
 if(connected):
   conn.close()
+  """)
 ```
 
