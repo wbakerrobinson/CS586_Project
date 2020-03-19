@@ -328,7 +328,7 @@ else:
 _number of students with interest level greater than 5_  
 ```{python question 1a}
 try:
-  sql = "SELECT * FROM agents;"
+  sql = "SELECT project_name, COUNT(*) FROM project_rel R JOIN project P ON (R.project_id = P.project_id) WHERE interest > 5 GROUP BY project_name ORDER BY COUNT(*) DESC;"
   data = pandas.read_sql_query(sql, conn)
   print(data) # if you want to check your query
 except:
@@ -338,7 +338,8 @@ except:
 
 ```{r question 1b}
 #py$data is now a data frame that can be used in R
-str(py$data)
+kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of 5 or greater for each project") %>%
+  kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
 ```
 
 ### Count the number of times a project was selected as a top 3 choice:  
@@ -372,7 +373,7 @@ except:
 ### Create a scatterplot of interest level and confidence to complete each project:  
 ```{python question 4a}
 try:
-  sql = "<your query here>;"
+  sql = "SELECT interest, confidence, project_name FROM project_rel R JOIN project P on (R.project_id = P.project_id);"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -630,9 +631,8 @@ print("""if (connected == True and r.availSurvBool == True and ddl_run == False)
   cur.execute("DROP TABLE grade_rel;")
   cur.execute("DROP TABLE grade;")
   cur.execute("DROP TABLE availability cascade;")
-  cur.execute("DROP TABLE student cascade;")
+  cur.execute("DROP TABLE student cascade;") """)
 if(connected):
   conn.close()
-  """)
 ```
 

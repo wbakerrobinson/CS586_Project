@@ -1,6 +1,9 @@
 library(shiny)
 library(shinythemes)
 library(reticulate)
+library(knitr)
+library(kableExtra)
+library(ggplot2)
 
 ReadCsvParam <- function(inFile)
 {
