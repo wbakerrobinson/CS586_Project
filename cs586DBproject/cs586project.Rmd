@@ -49,8 +49,9 @@ try:
       host = r.host,
       password = r.password
     )
-except:
-    print("ERROR: Unable to connect to database")
+except psycopg2.Error as error:
+    print(error)
+    pass
     connected = False
 if(connected):
   conn.autocommit = True
@@ -276,29 +277,42 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   try:
       for command in commands:
         cur.execute(command)
-  except:
-      print("ERROR: Not able to run DDL")
-      
-  cur.copy_from(to_file_obj(student_df), 'student', sep = '\t', null = 'NULL')
-  cur.copy_from(to_file_obj(avail_df), 'availability', sep = '\t', null = 'NULL')
-  cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = '\t', null = 'NULL')
-  cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = '\t', null = 'NULL')
-  ddl_run = True
+  except psycopg2.DatabaseError as error:
+    pass
+    print(error)
+  #upload availability survey    
+  try:
+    cur.copy_from(to_file_obj(student_df), 'student', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(avail_df), 'availability', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = '\t', null = 'NULL')
+    ddl_run = True
+  except psycopg2.DatabaseError as error:
+    pass
+    print(error)
 if (connected == True and ddl_run == True):
   if(r.projSurvBool == True):
     print("project data will be uploaded here")
-    cur.copy_from(to_file_obj(interest_df), 'interest', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(skill_df), 'skill', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(work_style_df), 'work_style', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(project_df), 'project', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(role_df), 'role', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(interested_in_df), 'interested_in', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(skilled_in_df), 'skilled_in', sep = '\t', null = 'NULL')
+    try:
+      cur.copy_from(to_file_obj(interest_df), 'interest', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(skill_df), 'skill', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(work_style_df), 'work_style', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(project_df), 'project', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(role_df), 'role', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(interested_in_df), 'interested_in', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(skilled_in_df), 'skilled_in', sep = '\t', null = 'NULL')
+    except psycopg2.DatabaseError as error:
+      pass
+      print(error)
   if(r.eligibleBool == True):
     print("grade data will be uploaded here")
-    cur.copy_from(to_file_obj(grade_df), 'grade', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(grade_rel_df), 'grade_rel', sep = '\t', null = 'NULL')
+    try:
+      cur.copy_from(to_file_obj(grade_df), 'grade', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(grade_rel_df), 'grade_rel', sep = '\t', null = 'NULL')
+    except psycopg2.DatabaseError as error:
+      pass
+      print(error)
   else:
     print("Connected, and database is setup. No data to upload or database already has data")
 elif(connected == True and r.availSurvBool == False and ddl_run == False):
@@ -312,53 +326,291 @@ else:
 ## Interest Level  
 ### Count the number of students interested in each project:  
 _number of students with interest level greater than 5_  
+```{python question 1a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+  # print(data) # if you want to check your query
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 1b}
+#py$data is now a data frame that can be used in R
+```
 
 ### Count the number of times a project was selected as a top 3 choice:  
+```{python question 2a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
 
-### Are there more students who marked low interest in all projects than students who marked high interest in all projects?  
-_How to define low vs. high interest?_  
+```{r question 2b}
+
+```
 
 ### Output a list of the 5 students who have the highest interest level for each project:  
+```{python question3a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 3b}
+
+```
 
 ### Create a scatterplot of interest level and confidence to complete each project:  
+```{python question 4a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 4b}
+
+```
 
 ### What skills are students most interested in?  
+```{python question 5a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 5b}
+
+```
 
 ## Availability  
 ### When are most students available?  
 _Create a heatmap_
+```{python question 6a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 6b}
+
+```
 
 ### Plot students time availability stratified by 1st choice of project:  
+```{python question 7a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 7b}
+
+```
 
 ### Plot students time availability stratified by 2nd choice of project:  
+```{python question 8a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 8b}
+
+```
 
 ### Plot students time availability stratified by 3rd choice of project:  
+```{python question 9a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 9b}
+
+```
 
 ### What proportion of students perfer times before 10:00 Am?
+```{python question 10a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 10b}
+
+```
 
 ### What proportion of students are available past 6:00 Pm? 
+```{python question 11a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 11b}
+
+```
 
 ## Skills
 ### What are the 5 most common skills?  
+```{python question 12a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 12b}
+
+```
 
 ### What are the 5 least common skills?  
+```{python question 13a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 13b}
+
+```
 
 ### What is the most common skill among those who got straight A’s in their prerequisite courses?  
 _Do they have to have an A in all pre-reqs? How many people actually did this?_  
+```{python question 14a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 14b}
+
+```
 
 ### Return a list of the 5 students who are most confident in their ability to complete each project:  
+```{python question 15a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 15b}
+
+```
 
 ### Create a histogram of the students confidence level in completing each project:  
+```{python question 16a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 16b}
+
+```
 
 ### Create a barchart of the skills students are skilled in or familiar with:  
+```{python question 17a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 17b}
+
+```
 
 ## Eligibility
 ### How many students do not meet eligibility criteria?   
+```{python question 18a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 18b}
+
+```
 
 ### Where do skills not match with eligibility criteria?  
 _May be hard to match skills and classes taken..._  
+```{python question 19a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 19b}
+
+```
 
 ### What is the average confidence level of students who do not meet eligibility criteria for each project?  
+```{python question 20a}
+try:
+  sql = "<your query here>;"
+  data = pandas.read_sql_query(sql, conn)
+except:
+  print("Error with query")
+  pass
+```
+
+```{r question 20b}
+
+```
 
 
 ```{python}
