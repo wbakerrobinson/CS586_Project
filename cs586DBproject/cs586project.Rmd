@@ -309,7 +309,7 @@ else:
 ```
 
 # 20 Questions     
-## Interst Level  
+## Interest Level  
 ### Count the number of students interested in each project:  
 _number of students with interest level greater than 5_  
 
