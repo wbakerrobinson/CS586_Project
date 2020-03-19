@@ -13,8 +13,9 @@ try:
       host = r.host,
       password = r.password
     )
-except:
-    print("ERROR: Unable to connect to database")
+except psycopg2.Error as error:
+    print(error)
+    pass
     connected = False
 if(connected):
   conn.autocommit = True
@@ -172,30 +173,43 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   try:
       for command in commands:
         cur.execute(command)
-  except:
-      print("ERROR Not able to run DDL")
+  except psycopg2.DatabaseError as error:
+    pass
+    print(error)
   
   # upload availability survey
-  cur.copy_from(to_file_obj(student_df), 'student', sep = '\t', null = 'NULL')
-  cur.copy_from(to_file_obj(avail_df), 'availability', sep = '\t', null = 'NULL')
-  cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = '\t', null = 'NULL')
-  cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = '\t', null = 'NULL')
-  ddl_run = 1
+  try:
+    cur.copy_from(to_file_obj(student_df), 'student', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(avail_df), 'availability', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(avail_rel_df), 'availability_rel', sep = '\t', null = 'NULL')
+    cur.copy_from(to_file_obj(avail_comm_df), 'availability_comments', sep = '\t', null = 'NULL')
+    ddl_run = 1
+  except psycopg2.DatabaseError as error:
+    pass
+    print(error)
 if (connected == True and ddl_run == 1):
   if(r.projSurvBool == True):
     print("project data will be uploaded here")
-    cur.copy_from(to_file_obj(interest_df), 'interest', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(skill_df), 'skill', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(work_style_df), 'work_style', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(project_df), 'project', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(role_df), 'role', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(interested_in_df), 'interested_in', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(skilled_in_df), 'skilled_in', sep = '\t', null = 'NULL')
+    try:
+      cur.copy_from(to_file_obj(interest_df), 'interest', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(skill_df), 'skill', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(work_style_df), 'work_style', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(project_df), 'project', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(project_rel_df), 'project_rel', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(role_df), 'role', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(interested_in_df), 'interested_in', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(skilled_in_df), 'skilled_in', sep = '\t', null = 'NULL')
+    except psycopg2.DatabaseError as error:
+      pass
+      print(error)
   if(r.eligibleBool == True):
     print("grade data will be uploaded here")
-    cur.copy_from(to_file_obj(grade_df), 'grade', sep = '\t', null = 'NULL')
-    cur.copy_from(to_file_obj(grade_rel_df), 'grade_rel', sep = '\t', null = 'NULL')
+    try:
+      cur.copy_from(to_file_obj(grade_df), 'grade', sep = '\t', null = 'NULL')
+      cur.copy_from(to_file_obj(grade_rel_df), 'grade_rel', sep = '\t', null = 'NULL')
+    except psycopg2.DatabaseError as error:
+      pass
+      print(error)
   else:
     print("Connected, and database is setup. No data to upload or database already has data")
 elif(connected == True and r.availSurvBool == False and ddl_run == 0):
@@ -220,3 +234,4 @@ if (connected == True and r.availSurvBool == True and ddl_run == 0):
   cur.execute("DROP TABLE student cascade;")
 if(connected):
   conn.close()
+
