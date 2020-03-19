@@ -326,53 +326,190 @@ else:
 ## Interst Level  
 ### Count the number of students interested in each project:  
 _number of students with interest level greater than 5_  
+```{python question 1}
+
+```
+
+```{r question 1}
+
+```
 
 ### Count the number of times a project was selected as a top 3 choice:  
+```{python question 2}
 
-### Are there more students who marked low interest in all projects than students who marked high interest in all projects?  
-_How to define low vs. high interest?_  
+```
+
+```{r question 2}
+
+```
 
 ### Output a list of the 5 students who have the highest interest level for each project:  
+```{python question3}
+
+```
+
+```{r question 3}
+
+```
 
 ### Create a scatterplot of interest level and confidence to complete each project:  
+```{python question 4}
+
+```
+
+```{r question 4}
+
+```
 
 ### What skills are students most interested in?  
+```{python question 5}
+
+```
+
+```{r question 5}
+
+```
 
 ## Availability  
 ### When are most students available?  
 _Create a heatmap_
+```{python question 6}
+
+```
+
+```{r question 6}
+
+```
 
 ### Plot students time availability stratified by 1st choice of project:  
+```{python question 7}
+
+```
+
+```{r question 7}
+
+```
 
 ### Plot students time availability stratified by 2nd choice of project:  
+```{python question 8}
+
+```
+
+```{r question 8}
+
+```
 
 ### Plot students time availability stratified by 3rd choice of project:  
+```{python question 9}
+
+```
+
+```{r question 9}
+
+```
 
 ### What proportion of students perfer times before 10:00 Am?
+```{python question 10}
+
+```
+
+```{r question 10}
+
+```
 
 ### What proportion of students are available past 6:00 Pm? 
+```{python question 11}
+
+```
+
+```{r question 11}
+
+```
 
 ## Skills
 ### What are the 5 most common skills?  
+```{python question 12}
+
+```
+
+```{r question 12}
+
+```
 
 ### What are the 5 least common skills?  
+```{python question 13}
+
+```
+
+```{r question 13}
+
+```
 
 ### What is the most common skill among those who got straight A’s in their prerequisite courses?  
 _Do they have to have an A in all pre-reqs? How many people actually did this?_  
+```{python question 14}
+
+```
+
+```{r question 14}
+
+```
 
 ### Return a list of the 5 students who are most confident in their ability to complete each project:  
+```{python question 15}
+
+```
+
+```{r question 15}
+
+```
 
 ### Create a histogram of the students confidence level in completing each project:  
+```{python question 16}
+
+```
+
+```{r question 16}
+
+```
 
 ### Create a barchart of the skills students are skilled in or familiar with:  
+```{python question 17}
+
+```
+
+```{r question 17}
+
+```
 
 ## Eligibility
 ### How many students do not meet eligibility criteria?   
+```{python question 18}
+
+```
+
+```{r question 18}
+
+```
 
 ### Where do skills not match with eligibility criteria?  
 _May be hard to match skills and classes taken..._  
+```{python question 19}
+
+```
+
+```{r question 19}
+
+```
 
 ### What is the average confidence level of students who do not meet eligibility criteria for each project?  
+```{python question 20}
+
+```
+
+```{r question 20}
+
+```
 
 
 ```{python}
