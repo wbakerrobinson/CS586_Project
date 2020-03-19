@@ -328,9 +328,9 @@ else:
 _number of students with interest level greater than 5_  
 ```{python question 1a}
 try:
-  sql = "<your query here>;"
+  sql = "SELECT * FROM agents;"
   data = pandas.read_sql_query(sql, conn)
-  # print(data) # if you want to check your query
+  print(data) # if you want to check your query
 except:
   print("Error with query")
   pass
@@ -338,6 +338,7 @@ except:
 
 ```{r question 1b}
 #py$data is now a data frame that can be used in R
+str(py$data)
 ```
 
 ### Count the number of times a project was selected as a top 3 choice:  
