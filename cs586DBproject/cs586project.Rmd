@@ -325,11 +325,11 @@ else:
 # 20 Questions     
 ## Interest Level  
 ### Count the number of students interested in each project:  
-_number of students with interest level greater than 5_  
+_number of students with interest level greater than 7_  
 ```{python question 1a}
 error = False
 try:
-  sql = "SELECT project_name, COUNT(*) FROM project_rel R JOIN project P ON (R.project_id = P.project_id) WHERE interest > 5 GROUP BY project_name ORDER BY COUNT(*) DESC;"
+  sql = "SELECT project_name, COUNT(*) FROM project_rel R JOIN project P ON (R.project_id = P.project_id) WHERE interest > 7 GROUP BY project_name ORDER BY COUNT(*) DESC;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -341,18 +341,18 @@ except:
 #py$data is now a data frame that can be used in R
 if(py$error == FALSE)
 {
-  kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of greater than 5 for each project") %>%
+  kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of greater than 7 for each project") %>%
     kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Count the number of students not interested in each project:  
-_number of students with interest less than or equal to 5_  
+_number of students with interest less than or equal to 3_  
 ```{python question 2a}
 qerror = False
 try:
-  sql = "SELECT project_name, COUNT(*) FROM project_rel R JOIN project P ON (R.project_id = P.project_id) WHERE interest <= 5 GROUP BY project_name ORDER BY COUNT(*) DESC;"
+  sql = "SELECT project_name, COUNT(*) FROM project_rel R JOIN project P ON (R.project_id = P.project_id) WHERE interest <= 3 GROUP BY project_name ORDER BY COUNT(*) DESC;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -363,7 +363,7 @@ except:
 ```{r question 2b}
 if(py$qerror == FALSE)
 {
-  kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of 5 or less for each project") %>%
+  kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of 3 or less for each project") %>%
     kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
@@ -403,7 +403,7 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```{python question 4a}
 qerror = False
 try:
-  sql = "SELECT interest, project_name FROM project_rel R JOIN project P on (R.project_id = P.project_id);"
+  sql = "SELECT interest, confidence, project_name FROM project_rel R JOIN project P on (R.project_id = P.project_id);"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -414,7 +414,7 @@ except:
 ```{r question 4b}
 if(py$qerror == FALSE)
 {
-  ggplot(data = py$data, mapping = aes(x = interest)) +
+  ggplot(data = py$data, mapping = aes(x = interest, fill = factor(confidence))) +
     geom_histogram(binwidth = 1) +
     labs(x = "Project Interest", y = "Number of Students at Each Interest Level", title = "Histogram of Interest for Each Project") +
     theme_bw() +
@@ -427,7 +427,7 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```{python question 5a}
 qerror = False
 try:
-  sql = "<your query here>;"
+  sql = "SELECT I.interested_id AS interest, COUNT(*) AS Count FROM interested_in I, student S WHERE S.student_id = I.student_id GROUP BY I.interested_id ORDER BY count DESC;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -438,7 +438,8 @@ except:
 ```{r question 5b}
 if(py$qerror == FALSE)
 {
-  
+  kable(py$data, caption = "CS Topics students are most interested in") %>%
+  kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
@@ -448,7 +449,7 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```{python question 6a}
 qerror = False
 try:
-  sql = "SELECT mtg_time, COUNT(*) AS count FROM availability_rel AR JOIN availability A on (AR.availability_id = A.availability_id) WHERE description = 'Available' GROUP BY mtg_time;"
+  sql = "SELECT mtg_time, day_of_week FROM availability_rel AR JOIN availability A on (AR.availability_id = A.availability_id) WHERE description = 'Available';"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -458,11 +459,40 @@ except:
 
 ```{r question 6b}
 if(py$qerror == FALSE)
-{
-    ggplot(data = py$data, mapping = aes(x = mtg_time, y = count)) +
-    geom_histogram(binwidth = 1) +
-    labs(x = "Available Meeting Times", y = "Number of Students", title = "Histogram of Available Meeting Times") +
-    theme_bw()
+{ 
+  data <- py$data
+  timeLabel <- c("6:00 am", "7:00 am", "8:00 am", "9:00 am", "10:00 am", "11:00 am", "12:00 pm", "1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm","5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm")
+  dayLabel = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+  lengthData <- nrow(data)
+  factTime <- 1:lengthData
+  factDay <- 1:lengthData
+  for (i in 1:lengthData)
+  {
+    for (j in 1:length(timeLabel))    
+    {
+      if(timeLabel[j] == data[i, "mtg_time"])
+      {
+        factTime[i] <- j
+      }
+    }
+    for(k in 1:length(dayLabel))
+    {
+      if(dayLabel[k] == data[i, "day_of_week"])
+      {
+        factDay[i] <- k
+      }
+    }
+  }
+  data$mtg_time <- factTime
+  data$day_of_week <- factDay
+  data[,"mtg_time"] <- factor(data[,"mtg_time"], labels = timeLabel)
+  data[,"day_of_week"] <- factor(data[,"day_of_week"], labels = dayLabel)
+  ggplot(data = data, mapping = aes(x = mtg_time)) +
+  geom_bar() +
+  labs(x = "Available Meeting Times", y = "Number of Students", title = "Barchart of Available Meeting Times") +
+  theme_bw() +
+  facet_wrap(~day_of_week, ncol = 2) +
+  theme(axis.text.x = element_text(angle = -90))
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
@@ -471,7 +501,7 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```{python question 7a}
 qerror = False
 try:
-  sql = "SELECT mtg_time, COUNT(*) FROM availability_rel AR JOIN availability A on (AR.availability_id = A.availability_id) WHERE description = 'Perferred' GROUP BY mtg_time;"
+  sql = "SELECT mtg_time, day_of_week FROM availability_rel AR JOIN availability A on (AR.availability_id = A.availability_id) WHERE description = 'Preferred';"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -482,10 +512,39 @@ except:
 ```{r question 7b}
 if(py$qerror == FALSE)
 {
-    ggplot(data = py$data, mapping = aes(x = mtg_time, y = count)) +
-    geom_histogram(binwidth = 1) +
-    labs(x = "Perferred Meeting Time", y = "Number of Students", title = "Histogram of Perferred Meeting Times") +
-    theme_bw()
+  data <- py$data
+  timeLabel <- c("6:00 am", "7:00 am", "8:00 am", "9:00 am", "10:00 am", "11:00 am", "12:00 pm", "1:00 pm", "2:00 pm", "3:00 pm", "4:00 pm","5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm")
+  dayLabel = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+  lengthData <- nrow(data)
+  factTime <- 1:lengthData
+  factDay <- 1:lengthData
+  for (i in 1:lengthData)
+  {
+    for (j in 1:length(timeLabel))    
+    {
+      if(timeLabel[j] == data[i, "mtg_time"])
+      {
+        factTime[i] <- j
+      }
+    }
+    for(k in 1:length(dayLabel))
+    {
+      if(dayLabel[k] == data[i, "day_of_week"])
+      {
+        factDay[i] <- k
+      }
+    }
+  }
+  data$mtg_time <- factTime
+  data$day_of_week <- factDay
+  data[,"mtg_time"] <- factor(data[,"mtg_time"],labels = timeLabel)
+  data[,"day_of_week"] <- factor(data[,"day_of_week"], labels = dayLabel)
+  ggplot(data = data, mapping = aes(x = mtg_time)) +
+  geom_bar() +
+  labs(x = "Perferred Meeting Time", y = "Number of Students", title = "Barchart of Perferred Meeting Times") +
+  theme_bw() +
+  facet_wrap(~day_of_week, ncol = 2) +
+  theme(axis.text.x = element_text(angle = -90))
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
