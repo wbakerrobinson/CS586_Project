@@ -454,10 +454,11 @@ except:
 
 ```
 
-### What proportion of students perfer times before 10:00 Am?
+### What proportion of students prefer times before 10:00 AM?
+
 ```{python question 10a}
 try:
-  sql = "<your query here>;"
+  sql = "select (select count(*) * 100.0 from student, availability_rel, availability where student.student_id = availability_rel.student_id and availability_rel.availability_id = availability.availability_id and availability.description = 'Preferred' and (availability.mtg_time = '6:00 am' or availability.mtg_time = '7:00 am' or availability.mtg_time = '8:00 am' or availability.mtg_time = '9:00 am'))/count(*) from student, availability_rel, availability where student.student_id = availability_rel.student_id and availability_rel.availability_id = availability.availability_id;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -469,9 +470,10 @@ except:
 ```
 
 ### What proportion of students are available past 6:00 Pm? 
+
 ```{python question 11a}
 try:
-  sql = "<your query here>;"
+  sql = "select (select count(*) * 100.0 from student, availability_rel, availability where student.student_id = availability_rel.student_id and availability_rel.availability_id = availability.availability_id and availability.description = 'Available' and (availability.mtg_time = '7:00 pm' or availability.mtg_time = '8:00 pm' or availability.mtg_time = '9:00 pm' or availability.mtg_time = '10:00 pm' or availability.mtg_time = '11:00 pm'))/count(*) from student, availability_rel, availability where student.student_id = availability_rel.student_id and availability_rel.availability_id = availability.availability_id;;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -483,10 +485,12 @@ except:
 ```
 
 ## Skills
-### What are the 5 most common skills?  
+
+### What are the 5 most common skills? 
+
 ```{python question 12a}
 try:
-  sql = "<your query here>;"
+  sql = "select familiar_id, count(*) from student, skilled_in where student.student_id = skilled_in.student_id group by skilled_in.familiar_id order by count desc limit 5;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
