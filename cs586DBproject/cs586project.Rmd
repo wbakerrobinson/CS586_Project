@@ -412,13 +412,7 @@ except:
 ```{r question 4b}
 if(py$qerror == FALSE)
 {
-  p <- ggplot(data = py$data, aes(x = project_name, y = interest, fill = confidence)) + 
-          geom_tile() +
-          scale_fill_gradient(low = "white", high = "blue") +
-          labs(title = "Heatmap of Confidence by interest and project", x = "Project", y = "Interest Level") +
-          theme_bw() +
-          theme(axis.text.x =  element_text(angle = -35, hjust = 0))
-  plotly::ggplotly(p)
+  
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
