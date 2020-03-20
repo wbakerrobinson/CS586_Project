@@ -4,6 +4,7 @@ library(reticulate)
 library(knitr)
 library(kableExtra)
 library(ggplot2)
+library(plotly)
 
 ReadCsvParam <- function(inFile)
 {

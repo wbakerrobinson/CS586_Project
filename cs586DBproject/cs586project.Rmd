@@ -174,15 +174,15 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   commands = (
   """  CREATE TABLE student (
   student_id integer PRIMARY KEY,
-  name varchar(50) NOT NULL,
-  email varchar(50) UNIQUE NOT NULL
+  email varchar(50) NOT NULL,
+  name varchar(50) UNIQUE NOT NULL
   );
   """,
   """ CREATE TABLE availability (
   availability_id integer PRIMARY KEY,
   day_of_week varchar(10) NOT NULL,
-  mtg_time varchar(10) NOT NULL,
-  description varchar(10) NOT NULL
+  description varchar(10) NOT NULL,
+  mtg_time varchar(10) NOT NULL
   );
   """,
   """ CREATE TABLE availability_rel (
@@ -193,7 +193,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   """,
   """ CREATE TABLE availability_comments (
   student_id integer REFERENCES student(student_id),
-  avail_comment text,
+  comment text,
   unavailability text,
   other text,
   PRIMARY KEY(student_id)
@@ -262,15 +262,15 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   """,
   """ CREATE TABLE interest (
   student_id integer REFERENCES student(student_id),
-  interest_most text NOT NULL,
-  interest_least text NOT NULL,
-  cs_enjoy text NOT NULL
+  s_interest_m text NOT NULL,
+  s_interest_l text NOT NULL,
+  enjoyed text NOT NULL
   );
   """,
   """ CREATE TABLE skill (
   student_id integer REFERENCES student(student_id),
-  know_most text NOT NULL,
-  know_least text NOT NULL,
+  s_knowledge_m text NOT NULL,
+  s_knowledge_l text NOT NULL,
   languages text NOT NULL
   );
   """)
@@ -327,147 +327,222 @@ else:
 ### Count the number of students interested in each project:  
 _number of students with interest level greater than 5_  
 ```{python question 1a}
+error = False
 try:
   sql = "SELECT project_name, COUNT(*) FROM project_rel R JOIN project P ON (R.project_id = P.project_id) WHERE interest > 5 GROUP BY project_name ORDER BY COUNT(*) DESC;"
   data = pandas.read_sql_query(sql, conn)
-  print(data) # if you want to check your query
 except:
   print("Error with query")
   pass
+  error = True
 ```
 
 ```{r question 1b}
 #py$data is now a data frame that can be used in R
-kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of 5 or greater for each project") %>%
-  kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
+if(py$error == FALSE)
+{
+  kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of 5 or greater for each project") %>%
+    kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Count the number of times a project was selected as a top 3 choice:  
 ```{python question 2a}
+qerror = False
 try:
   sql = "<your query here>;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
 ```{r question 2b}
-
+if(py$qerror == FALSE)
+{
+  
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Output a list of the 5 students who have the highest interest level for each project:  
 ```{python question3a}
+qerror = False
 try:
-  sql = "<your query here>;"
+  command = """CREATE VIEW student_interest AS (
+    SELECT S.student_id, S.name, S.email, PR.interest, P.project_id, P.project_name
+    FROM student S, project_rel PR, project P
+    WHERE S.student_id = PR.student_id AND PR.project_id = P.project_id
+  );"""
+  cur.execute(command)
+except psycopg2.Error as error:
+  print(error)
+try:
+  sql = "SELECT * FROM ((SELECT name, email, interest, project_name FROM student_interest WHERE project_id = 1 ORDER BY interest DESC LIMIT 5) UNION (SELECT name, email, interest, project_name FROM student_interest WHERE project_id = 2 ORDER BY interest DESC LIMIT 5) UNION (SELECT name, email, interest, project_name FROM student_interest WHERE project_id = 3 ORDER BY interest DESC LIMIT 5) UNION (SELECT name, email, interest, project_name FROM student_interest WHERE project_id = 4 ORDER BY interest DESC LIMIT 5) UNION (SELECT name, email, interest, project_name FROM student_interest WHERE project_id = 5 ORDER BY interest DESC LIMIT 5) UNION (SELECT name, email, interest, project_name FROM student_interest WHERE project_id = 6 ORDER BY interest DESC LIMIT 5) UNION (SELECT name, email, interest, project_name FROM student_interest WHERE project_id = 7 ORDER BY interest DESC LIMIT 5) UNION (SELECT name, email, interest, project_name FROM student_interest WHERE project_id = 8 ORDER BY interest DESC LIMIT 5)) AS A ORDER BY A.project_name ASC;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
   pass
+  qerror = True
 ```
 
 ```{r question 3b}
-
+if(py$qerror == FALSE)
+{
+  kable(py$data, caption = "5 students with highest interest for each project") %>%
+    kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Create a scatterplot of interest level and confidence to complete each project:  
 ```{python question 4a}
+qerror = False
 try:
   sql = "SELECT interest, confidence, project_name FROM project_rel R JOIN project P on (R.project_id = P.project_id);"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
 ```{r question 4b}
-
+if(py$qerror == FALSE)
+{
+  p <- ggplot(data = py$data, aes(x = project_name, y = interest, fill = confidence)) + 
+          geom_tile() +
+          scale_fill_gradient(low = "white", high = "blue") +
+          labs(title = "Heatmap of Confidence by interest and project", x = "Project", y = "Interest Level") +
+          theme_bw() +
+          theme(axis.text.x =  element_text(angle = -35, hjust = 0))
+  plotly::ggplotly(p)
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### What skills are students most interested in?  
 ```{python question 5a}
+qerror = False
 try:
   sql = "<your query here>;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
 ```{r question 5b}
-
+if(py$qerror == FALSE)
+{
+  
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ## Availability  
 ### When are most students available?  
 _Create a heatmap_
 ```{python question 6a}
+qerror = False
 try:
   sql = "<your query here>;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
 ```{r question 6b}
-
+if(py$qerror == FALSE)
+{
+  
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Plot students time availability stratified by 1st choice of project:  
 ```{python question 7a}
+qerror = False
 try:
   sql = "<your query here>;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
 ```{r question 7b}
-
+if(py$qerror == FALSE)
+{
+  
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Plot students time availability stratified by 2nd choice of project:  
 ```{python question 8a}
+qerror = False
 try:
   sql = "<your query here>;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
 ```{r question 8b}
-
+if(py$qerror == FALSE)
+{
+  
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Plot students time availability stratified by 3rd choice of project:  
 ```{python question 9a}
+qerror = False
 try:
   sql = "<your query here>;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
 ```{r question 9b}
-
+if(py$qerror == FALSE)
+{
+  
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### What proportion of students perfer times before 10:00 Am?
 ```{python question 10a}
+qerror = False
 try:
   sql = "<your query here>;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
 ```{r question 10b}
-
+if(py$qerror == FALSE)
+{
+  
+}
+renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### What proportion of students are available past 6:00 Pm? 
