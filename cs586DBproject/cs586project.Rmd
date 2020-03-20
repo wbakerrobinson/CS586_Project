@@ -325,7 +325,8 @@ else:
 # 20 Questions     
 ## Interest Level  
 ### Count the number of students interested in each project:  
-_number of students with interest level greater than 7_  
+_(Number of students with interest level greater than 7)_  
+
 ```{python question 1a}
 error = False
 try:
@@ -348,7 +349,8 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Count the number of students not interested in each project:  
-_number of students with interest less than or equal to 3_  
+_(Number of students with interest less than or equal to 3)_ 
+
 ```{python question 2a}
 qerror = False
 try:
@@ -370,6 +372,7 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### Output a list of the 5 students who have the highest interest level for each project:  
+
 ```{python question3a}
 qerror = False
 try:
@@ -399,7 +402,8 @@ if(py$qerror == FALSE)
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### Create a histogram of interest levels for each project:  
+### Create a histogram of interest levels for each project: 
+
 ```{python question 4a}
 qerror = False
 try:
@@ -423,7 +427,8 @@ if(py$qerror == FALSE)
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### What skills are students most interested in?  
+### What skills are students most interested in?
+
 ```{python question 5a}
 qerror = False
 try:
@@ -453,6 +458,7 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 
 ## Availability  
 ### When are most students available?  
+
 ```{python question 6a}
 qerror = False
 try:
@@ -504,7 +510,8 @@ if(py$qerror == FALSE)
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### When do most students perfer to meet?
+### When do most students prefer to meet?
+
 ```{python question 7a}
 qerror = False
 try:
@@ -548,7 +555,7 @@ if(py$qerror == FALSE)
   data[,"day_of_week"] <- factor(data[,"day_of_week"], labels = dayLabel)
   ggplot(data = data, mapping = aes(x = mtg_time)) +
   geom_bar() +
-  labs(x = "Perferred Meeting Time", y = "Number of Students", title = "Barchart of Perferred Meeting Times") +
+  labs(x = "Preferred Meeting Time", y = "Number of Students", title = "Barchart of Preferred Meeting Times") +
   theme_bw() +
   facet_wrap(~day_of_week, ncol = 2) +
   theme(axis.text.x = element_text(angle = -90))
@@ -556,7 +563,8 @@ if(py$qerror == FALSE)
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### When do students who like to work solo perfer to meet?  
+### When do students who like to work solo prefer to meet? 
+
 ```{python question 8a}
 qerror = False
 try:
@@ -577,6 +585,7 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
 ### When do students who are interested in research want to meet on Friday?  
+
 ```{python question 9a}
 qerror = False
 try:
