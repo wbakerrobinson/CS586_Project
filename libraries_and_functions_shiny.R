@@ -18,7 +18,7 @@ UpdateProgress <- function(renderVal, renderByShiny)
   if(renderByShiny & renderVal < 25)
   {
     shiny::setProgress(renderVal/25)
-    renderVal = renderVal + 1
+    renderVal = renderVal + 2
   }
   return(renderVal)
 }

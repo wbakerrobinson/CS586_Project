@@ -438,8 +438,15 @@ except:
 ```{r question 5b}
 if(py$qerror == FALSE)
 {
-  kable(py$data, caption = "CS Topics students are most interested in") %>%
-  kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
+  ggplot2::ggplot(py$data, aes(x = interest, y = count,
+                             fill = "blue")) +
+  geom_col() +
+  labs(title = "Distribution of Interest",
+       x = "Types of Skills",
+       y = "Proportion") +
+  scale_y_continuous(labels = function(x) paste0(x, '%')) +
+  scale_x_continuous(breaks = 0:9, labels = c("FED", "BED", "SS", "WD", "MD", "ES", "UI", "UX", "None", "Other")) + 
+  theme(legend.position = "none")
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
@@ -549,11 +556,11 @@ if(py$qerror == FALSE)
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### Plot students time availability stratified by 2nd choice of project:  
+### When do students who like to work solo perfer to meet?  
 ```{python question 8a}
 qerror = False
 try:
-  sql = "<your query here>;"
+  sql = "SELECT mtg_time, COUNT(*) FROM availability_rel AR, availability A, student S, work_style W WHERE A.description = 'Preferred' AND A.availability_id = AR.availability_id AND AR.student_id = S.student_id AND S.student_id = W.student_id AND W.work = 'Work solo' GROUP BY mtg_time;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -564,16 +571,16 @@ except:
 ```{r question 8b}
 if(py$qerror == FALSE)
 {
-  
+  print(py$data)
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### Plot students time availability stratified by 3rd choice of project:  
+### When do students who are interested in research want to meet on Friday?  
 ```{python question 9a}
 qerror = False
 try:
-  sql = "<your query here>;"
+  sql = "SELECT mtg_time, COUNT(*) FROM availability_rel AR, availability A, student S, role W WHERE A.description = 'Preferred' AND A.availability_id = AR.availability_id AND AR.student_id = S.student_id AND S.student_id = W.student_id AND W.role_id = 1 AND A.day_of_week = 'Friday' GROUP BY mtg_time;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -584,7 +591,7 @@ except:
 ```{r question 9b}
 if(py$qerror == FALSE)
 {
-  
+  print(py$data) 
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
@@ -613,11 +620,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ### What proportion of students are available past 6:00 Pm? 
 
 ```{python question 11a}
+qerror = False
 try:
   sql = "select (select count(*) * 100.0 from student, availability_rel, availability where student.student_id = availability_rel.student_id and availability_rel.availability_id = availability.availability_id and availability.description = 'Available' and (availability.mtg_time = '7:00 pm' or availability.mtg_time = '8:00 pm' or availability.mtg_time = '9:00 pm' or availability.mtg_time = '10:00 pm' or availability.mtg_time = '11:00 pm'))/count(*) from student, availability_rel, availability where student.student_id = availability_rel.student_id and availability_rel.availability_id = availability.availability_id;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -635,11 +644,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ### What are the 5 most common skills? 
 
 ```{python question 12a}
+qerror = False
 try:
   sql = "select familiar_id, count(*) from student, skilled_in where student.student_id = skilled_in.student_id group by skilled_in.familiar_id order by count desc limit 5;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -654,11 +665,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 
 ### What are the 5 least common skills?  
 ```{python question 13a}
+qerror = False
 try:
   sql = "select familiar_id, count(*) from student, skilled_in where student.student_id = skilled_in.student_id group by skilled_in.familiar_id order by count limit 5;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -674,11 +687,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ### What is the most common skill among those who got an A in CS350?
 
 ```{python question 14a}
+qerror = False
 try:
   sql = "select familiar_id, count(*) from student, skilled_in, grade_rel, grade where student.student_id = skilled_in.student_id and grade_rel.student_id = student.student_id and grade.grade_id = grade_rel.grade_id and grade.grade_value = 'A' and grade.course = 'CS350' group by skilled_in.familiar_id order by count desc limit 1;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -694,11 +709,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ### Which student is the most confident in their ability to complete project 2?
 
 ```{python question 15a}
+qerror = False
 try:
   sql = "select a.student_id from student a, project_rel b where a.student_id = b.student_id and b.project_id = 2 and b.confidence in (select max(c.confidence) from project_rel c where c.project_id = 2);"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -713,11 +730,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 
 ### Which students failed CS161? 
 ```{python question 16a}
+qerror = False
 try:
   sql = "select student.student_id from student, grade_rel, grade where student.student_id = grade_rel.student_id and grade_rel.grade_id = grade.grade_id and grade.course = 'CS161' and grade.grade_value = 'F';"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -734,11 +753,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 
 ### Create a barchart of the skills students are skilled in or familiar with:  
 ```{python question 17a}
+qerror = False
 try:
   sql = "select familiar_id, count(*) from skilled_in group by familiar_id;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -759,11 +780,13 @@ ggplot2::ggplot(py$data, aes(x = familiar_id, y = count,
 ## Eligibility
 ### How many students do not meet eligibility criteria?   
 ```{python question 18a}
+qerror = False
 try:
   sql = "select count(*) from student, grade_rel, grade where student.student_id = grade_rel.student_id and grade_rel.grade_id = grade.grade_id and (grade.course = 'CS300' or grade.course = 'CS320' or grade.course = 'CS333' or grade.course = 'CS350') and (grade.grade_value = 'C-' or grade.grade_value = 'D+' or grade.grade_value = 'D' or grade.grade_value = 'D-' or grade.grade_value = 'F');"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -779,11 +802,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ### Which students have the same degree of interest in some project as someone who has at least one of the same skills?  
 
 ```{python question 19a}
+qerror = False
 try:
   sql = "select distinct a.student_id from student a, project_rel b, skilled_in z where a.student_id = b.student_id and z.student_id = a.student_id and b.interest = some (select c.interest from project_rel c, student d, skilled_in f where d.student_id = c.student_id and c.project_id = b.project_id and f.student_id = d.student_id and d.student_id <> a.student_id  and f.familiar_id = z.familiar_id);"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -799,11 +824,13 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 
 ### What is the average level of confidence students have with project 6? 
 ```{python question 20a}
+qerror = False
 try:
   sql = "select avg(confidence) from project_rel where project_rel.project_id = 6;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
+  qerror = True
   pass
 ```
 
@@ -819,22 +846,6 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 
 
 ```{python}
-# This is for testing
-print("""if (connected == True and r.availSurvBool == True and ddl_run == False):
-  cur.execute("DROP TABLE availability_rel;")
-  cur.execute("DROP TABLE availability_comments;")
-  cur.execute("DROP TABLE interest;")
-  cur.execute("DROP TABLE skill CASCADE;")
-  cur.execute("DROP TABLE work_style;")
-  cur.execute("DROP TABLE project_rel;")
-  cur.execute("DROP TABLE project;")
-  cur.execute("DROP TABLE role;")
-  cur.execute("DROP TABLE interested_in;")
-  cur.execute("DROP TABLE skilled_in;")
-  cur.execute("DROP TABLE grade_rel;")
-  cur.execute("DROP TABLE grade;")
-  cur.execute("DROP TABLE availability cascade;")
-  cur.execute("DROP TABLE student cascade;") """)
 if(connected):
   conn.close()
 ```
