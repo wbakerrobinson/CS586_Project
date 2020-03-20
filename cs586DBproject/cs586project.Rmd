@@ -193,7 +193,7 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   """,
   """ CREATE TABLE availability_comments (
   student_id integer REFERENCES student(student_id),
-  avail_comment text,
+  comment text,
   unavailability text,
   other text,
   PRIMARY KEY(student_id)
@@ -262,15 +262,15 @@ if (connected == True and r.availSurvBool == True and ddl_run == False):
   """,
   """ CREATE TABLE interest (
   student_id integer REFERENCES student(student_id),
-  interest_most text NOT NULL,
-  interest_least text NOT NULL,
-  cs_enjoy text NOT NULL
+  s_interest_m text NOT NULL,
+  s_interest_l text NOT NULL,
+  enjoyed text NOT NULL
   );
   """,
   """ CREATE TABLE skill (
   student_id integer REFERENCES student(student_id),
-  know_most text NOT NULL,
-  know_least text NOT NULL,
+  s_knowledge_m text NOT NULL,
+  s_knowledge_l text NOT NULL,
   languages text NOT NULL
   );
   """)
