@@ -341,17 +341,18 @@ except:
 #py$data is now a data frame that can be used in R
 if(py$error == FALSE)
 {
-  kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of 5 or greater for each project") %>%
+  kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of greater than 5 for each project") %>%
     kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### Count the number of times a project was selected as a top 3 choice:  
+### Count the number of students not interested in each project:  
+_number of students with interest less than or equal to 5_  
 ```{python question 2a}
 qerror = False
 try:
-  sql = "<your query here>;"
+  sql = "SELECT project_name, COUNT(*) FROM project_rel R JOIN project P ON (R.project_id = P.project_id) WHERE interest <= 5 GROUP BY project_name ORDER BY COUNT(*) DESC;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -362,7 +363,8 @@ except:
 ```{r question 2b}
 if(py$qerror == FALSE)
 {
-  
+  kable(py$data, col.names = c("Project Name", "Count"), caption = "Interest of 5 or less for each project") %>%
+    kable_styling(bootstrap_options = c("striped"), full_width = FALSE)
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
@@ -397,11 +399,11 @@ if(py$qerror == FALSE)
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### Create a scatterplot of interest level and confidence to complete each project:  
+### Create a histogram of interest levels for each project:  
 ```{python question 4a}
 qerror = False
 try:
-  sql = "SELECT interest, confidence, project_name FROM project_rel R JOIN project P on (R.project_id = P.project_id);"
+  sql = "SELECT interest, project_name FROM project_rel R JOIN project P on (R.project_id = P.project_id);"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -412,7 +414,11 @@ except:
 ```{r question 4b}
 if(py$qerror == FALSE)
 {
-  
+  ggplot(data = py$data, mapping = aes(x = interest)) +
+    geom_histogram(binwidth = 1) +
+    labs(x = "Project Interest", y = "Number of Students at Each Interest Level", title = "Histogram of Interest for Each Project") +
+    theme_bw() +
+    facet_wrap(~project_name, ncol = 2)
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
@@ -439,11 +445,10 @@ renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 
 ## Availability  
 ### When are most students available?  
-_Create a heatmap_
 ```{python question 6a}
 qerror = False
 try:
-  sql = "<your query here>;"
+  sql = "SELECT mtg_time, COUNT(*) AS count FROM availability_rel AR JOIN availability A on (AR.availability_id = A.availability_id) WHERE description = 'Available' GROUP BY mtg_time;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -454,16 +459,19 @@ except:
 ```{r question 6b}
 if(py$qerror == FALSE)
 {
-  
+    ggplot(data = py$data, mapping = aes(x = mtg_time, y = count)) +
+    geom_histogram(binwidth = 1) +
+    labs(x = "Available Meeting Times", y = "Number of Students", title = "Histogram of Available Meeting Times") +
+    theme_bw()
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
 
-### Plot students time availability stratified by 1st choice of project:  
+### When do most students perfer to meet?
 ```{python question 7a}
 qerror = False
 try:
-  sql = "<your query here>;"
+  sql = "SELECT mtg_time, COUNT(*) FROM availability_rel AR JOIN availability A on (AR.availability_id = A.availability_id) WHERE description = 'Perferred' GROUP BY mtg_time;"
   data = pandas.read_sql_query(sql, conn)
 except:
   print("Error with query")
@@ -474,7 +482,10 @@ except:
 ```{r question 7b}
 if(py$qerror == FALSE)
 {
-  
+    ggplot(data = py$data, mapping = aes(x = mtg_time, y = count)) +
+    geom_histogram(binwidth = 1) +
+    labs(x = "Perferred Meeting Time", y = "Number of Students", title = "Histogram of Perferred Meeting Times") +
+    theme_bw()
 }
 renderVal <- UpdateProgress(renderVal, params$rendered_by_shiny)
 ```
